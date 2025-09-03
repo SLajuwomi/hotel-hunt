@@ -1,3 +1,3 @@
 # Hotel Hunt
 
-A small game where you search for items/clues to what went down in a gloomy, creepy hotel.
+recreation of space invaders in pygame. first time making a game in pygame.
