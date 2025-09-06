@@ -1,15 +1,21 @@
 from re import S
 import pygame
 import random
+import sys
 
 pygame.init()
+pygame.font.init()
+font = pygame.font.SysFont("Arial", 30)
+
 screen_width = 640
 screen_height = 480
 screen = pygame.display.set_mode((screen_width, screen_height))
 
+
 player_x = screen_width // 2
 player_y_top = screen_height - 20
 player_speed = 2
+player_lives = 3
 triangle_color = (255, 255, 255)
 clock = pygame.time.Clock()
 
@@ -71,15 +77,6 @@ while running:
             enemy_bullets.append(pygame.Rect(shooter.centerx, shooter.bottom, 5, 5))
             last_enemy_shot_time = current_time
 
-    # if current_time - last_enemy_shot_time > enemy_shot_interval:
-    #     for row in list(enemies):
-    #         picked_enemy = random.choice(row)
-    #         if picked_enemy:
-    #             enemy_bullets.append(
-    #                 pygame.Rect(picked_enemy.centerx, picked_enemy.bottom, 5, 5)
-    #             )
-    #             last_enemy_shot_time = current_time
-
     keys = pygame.key.get_pressed()
     if keys[pygame.K_a]:
         player_x -= player_speed
@@ -88,12 +85,15 @@ while running:
 
     screen.fill((0, 0, 0))
 
+    text_surface = font.render(f"{player_lives}", True, (255, 255, 255))
+    screen.blit(text_surface, (10, 10))
+
     top_of_triangle = (player_x, screen_height - 20)
     bot_left_triangle = (player_x - 10, screen_height)
     bot_right_triangle = (player_x + 10, screen_height)
     triangle_vertices = [top_of_triangle, bot_left_triangle, bot_right_triangle]
 
-    pygame.draw.polygon(screen, triangle_color, triangle_vertices)
+    player = pygame.draw.polygon(screen, triangle_color, triangle_vertices)
 
     reverse_needed = False
     if current_time - last_enemy_move_time > enemy_move_interval:
@@ -120,6 +120,12 @@ while running:
     for enemy_bullet in list(enemy_bullets):
         enemy_bullet.y += 5
         pygame.draw.rect(screen, (0, 255, 0), enemy_bullet)
+        if enemy_bullet.colliderect(player):
+            player_lives -= 1
+            enemy_bullets.remove(enemy_bullet)
+            if player_lives == 0:
+                print("GAME OVER!")
+                sys.exit()
         if enemy_bullet.y > screen_height or enemy_bullet.y < 0:
             enemy_bullets.remove(enemy_bullet)
 
