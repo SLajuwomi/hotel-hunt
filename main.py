@@ -102,9 +102,11 @@ while running:
 
     player = pygame.draw.polygon(screen, triangle_color, triangle_vertices)
 
-    # Enemy movement and reversal
+    # Speed increase as score increase
     if player_score % 100 == 0 and player_score != 0:
         enemy_move_interval -= 7
+
+    # Enemy movement and reversal
     reverse_needed = False
     if current_time - last_enemy_move_time > enemy_move_interval:
         for row in enemies:
@@ -127,6 +129,7 @@ while running:
                         enemy.y += 5
         last_enemy_move_time = current_time
 
+    # Drawing enemies to screen
     for row in enemies:
         for enemy in row:
             if enemy is not None:
