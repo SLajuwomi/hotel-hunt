@@ -68,6 +68,7 @@ while running:
 
     current_time = pygame.time.get_ticks()
 
+    # Enemy shooting
     for col in range(max_enemies):
         for row in reversed(range(len(enemies))):
             if col < len(enemies[row]):
@@ -81,6 +82,7 @@ while running:
             enemy_bullets.append(pygame.Rect(shooter.centerx, shooter.bottom, 5, 5))
             last_enemy_shot_time = current_time
 
+    # Player movement
     keys = pygame.key.get_pressed()
     if keys[pygame.K_a]:
         player_x -= player_speed
@@ -100,6 +102,9 @@ while running:
 
     player = pygame.draw.polygon(screen, triangle_color, triangle_vertices)
 
+    # Enemy movement and reversal
+    if player_score % 100 == 0 and player_score != 0:
+        enemy_move_interval -= 7
     reverse_needed = False
     if current_time - last_enemy_move_time > enemy_move_interval:
         for row in enemies:
