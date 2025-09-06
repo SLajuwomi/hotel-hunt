@@ -1,4 +1,5 @@
 import pygame
+import random
 
 pygame.init()
 screen_width = 640
@@ -13,6 +14,10 @@ clock = pygame.time.Clock()
 
 enemy_width = 40
 enemy_height = 30
+enemy_bullets = []
+enemy_shot_interval = 2000
+enemies_that_can_shoot = []
+last_enemy_shot_time = 0
 spacing = 10
 left_margin = 50
 right_margin = 50
@@ -52,6 +57,15 @@ while running:
 
     current_time = pygame.time.get_ticks()
 
+    if current_time - last_enemy_shot_time > enemy_shot_interval:
+        for row in list(enemies):
+            picked_enemy = random.choice(row)
+            if picked_enemy:
+                enemy_bullets.append(
+                    pygame.Rect(picked_enemy.centerx, picked_enemy.bottom, 5, 5)
+                )
+                last_enemy_shot_time = current_time
+
     keys = pygame.key.get_pressed()
     if keys[pygame.K_a]:
         player_x -= player_speed
@@ -71,7 +85,8 @@ while running:
     if current_time - last_enemy_move_time > enemy_move_interval:
         for row in enemies:
             for enemy in row:
-                enemy.x += enemy_direction * enemy_speed
+                if enemy is not None:
+                    enemy.x += enemy_direction * enemy_speed
         for row in enemies:
             if row[0].bottomleft[0] <= 0 or row[-1].bottomright[0] >= screen_width:
                 reverse_needed = True
@@ -79,24 +94,33 @@ while running:
             enemy_direction *= -1
             for nested_row in enemies:
                 for enemy in nested_row:
-                    enemy.y += 5
+                    if enemy is not None:
+                        enemy.y += 5
         last_enemy_move_time = current_time
 
     for row in enemies:
         for enemy in row:
-            pygame.draw.rect(screen, (255, 0, 0), enemy)
+            if enemy is not None:
+                pygame.draw.rect(screen, (255, 0, 0), enemy)
+
+    for enemy_bullet in list(enemy_bullets):
+        enemy_bullet.y += 5
+        pygame.draw.rect(screen, (0, 255, 0), enemy_bullet)
+        if enemy_bullet.y > screen_height or enemy_bullet.y < 0:
+            enemy_bullets.remove(enemy_bullet)
 
     for bullet in list(bullets):
         bullet.top -= 5
         pygame.draw.rect(screen, (255, 0, 0), bullet)
         if bullet.top > screen_height or bullet.top < 0:
             bullets.remove(bullet)
-        for row in list(enemies):
-            for enemy in list(row):
-                if bullet.colliderect(enemy):
-                    bullets.remove(bullet)
-                    row.remove(enemy)
-                    break
+        for row in range(len(enemies)):
+            for col in range(len(enemies[row])):
+                if enemies[row][col] is not None:
+                    if bullet.colliderect(enemies[row][col]):
+                        bullets.remove(bullet)
+                        enemies[row][col] = None
+                        break
 
     pygame.display.flip()
 
