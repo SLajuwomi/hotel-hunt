@@ -104,10 +104,14 @@ while running:
             for enemy in row:
                 if enemy is not None:
                     enemy.x += enemy_direction * enemy_speed
-        for row in enemies:
-            # bug here when last element in column is None
-            if row[0].bottomleft[0] <= 0 or row[-1].bottomright[0] >= screen_width:
-                reverse_needed = True
+        for col in range(max_enemies):
+            for row in range(len(enemies)):
+                if enemies[row][col] is not None:
+                    if (
+                        enemies[row][col].bottomleft[0] <= 0
+                        or enemies[row][col].bottomright[0] >= screen_width
+                    ):
+                        reverse_needed = True
         if reverse_needed:
             enemy_direction *= -1
             for nested_row in enemies:
