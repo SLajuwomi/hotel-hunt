@@ -14,7 +14,7 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 
 
 player_x = screen_width // 2
-player_y_top = screen_height - 20
+player_y_top = screen_height - footer_height - 20
 player_speed = 2
 player_lives = 3
 player_lives_triangle_x = 20
