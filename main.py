@@ -1,7 +1,7 @@
-from re import S
 import pygame
 import random
 import sys
+
 
 pygame.init()
 pygame.font.init()
@@ -9,6 +9,7 @@ font = pygame.font.SysFont("Arial", 30)
 
 screen_width = 640
 screen_height = 480
+footer_height = 40
 screen = pygame.display.set_mode((screen_width, screen_height))
 
 
@@ -16,13 +17,15 @@ player_x = screen_width // 2
 player_y_top = screen_height - 20
 player_speed = 2
 player_lives = 3
+player_lives_triangle_x = 20
 triangle_color = (255, 255, 255)
+
 clock = pygame.time.Clock()
 
 enemy_width = 40
 enemy_height = 30
 enemy_bullets = []
-enemy_shot_interval = 2000
+enemy_shot_interval = 1000
 enemies_that_can_shoot = []
 last_enemy_shot_time = 0
 spacing = 10
@@ -88,9 +91,9 @@ while running:
     text_surface = font.render(f"{player_lives}", True, (255, 255, 255))
     screen.blit(text_surface, (10, 10))
 
-    top_of_triangle = (player_x, screen_height - 20)
-    bot_left_triangle = (player_x - 10, screen_height)
-    bot_right_triangle = (player_x + 10, screen_height)
+    top_of_triangle = (player_x, screen_height - footer_height - 20)
+    bot_left_triangle = (player_x - 10, screen_height - footer_height)
+    bot_right_triangle = (player_x + 10, screen_height - footer_height)
     triangle_vertices = [top_of_triangle, bot_left_triangle, bot_right_triangle]
 
     player = pygame.draw.polygon(screen, triangle_color, triangle_vertices)
@@ -102,6 +105,7 @@ while running:
                 if enemy is not None:
                     enemy.x += enemy_direction * enemy_speed
         for row in enemies:
+            # bug here when last element in column is None
             if row[0].bottomleft[0] <= 0 or row[-1].bottomright[0] >= screen_width:
                 reverse_needed = True
         if reverse_needed:
@@ -128,6 +132,15 @@ while running:
                 sys.exit()
         if enemy_bullet.y > screen_height or enemy_bullet.y < 0:
             enemy_bullets.remove(enemy_bullet)
+
+    for i in range(player_lives):
+        if player_lives > 0:
+            life_tri_x = player_lives_triangle_x + (20 * i)
+            life_tri_top = (life_tri_x, screen_height - 20)
+            life_tri_bot_left = (life_tri_x - 10, screen_height)
+            life_tri_bot_right = (life_tri_x + 10, screen_height)
+            life_tri_vertices = [life_tri_top, life_tri_bot_left, life_tri_bot_right]
+            pygame.draw.polygon(screen, triangle_color, life_tri_vertices)
 
     for bullet in list(bullets):
         bullet.top -= 5
