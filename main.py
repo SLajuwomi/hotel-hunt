@@ -18,6 +18,7 @@ player_y_top = screen_height - footer_height - 20
 player_speed = 2
 player_lives = 3
 player_lives_triangle_x = 20
+player_score = 0
 triangle_color = (255, 255, 255)
 
 clock = pygame.time.Clock()
@@ -88,7 +89,8 @@ while running:
 
     screen.fill((0, 0, 0))
 
-    text_surface = font.render(f"{player_lives}", True, (255, 255, 255))
+    # Print Player score
+    text_surface = font.render(f"{player_score}", True, (255, 255, 255))
     screen.blit(text_surface, (10, 10))
 
     top_of_triangle = (player_x, screen_height - footer_height - 20)
@@ -146,6 +148,7 @@ while running:
             life_tri_vertices = [life_tri_top, life_tri_bot_left, life_tri_bot_right]
             pygame.draw.polygon(screen, triangle_color, life_tri_vertices)
 
+    # Player shooting and killing enemies
     for bullet in list(bullets):
         bullet.top -= 5
         pygame.draw.rect(screen, (255, 0, 0), bullet)
@@ -156,6 +159,7 @@ while running:
                 if enemies[row][col] is not None:
                     if bullet.colliderect(enemies[row][col]):
                         bullets.remove(bullet)
+                        player_score += 10
                         enemies[row][col] = None
                         break
 
