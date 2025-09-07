@@ -1,7 +1,11 @@
 import pygame
 import random
 import sys
+from enemy import Enemy
 
+
+print(Enemy(10, 10, 50, 70, 15))
+# print(repr(Enemy(10, 10, 50, 70, 15)))
 
 pygame.init()
 pygame.font.init()
@@ -19,6 +23,7 @@ player_speed = 2
 player_lives = 3
 player_lives_triangle_x = 20
 player_score = 0
+point_val = 10
 triangle_color = (255, 255, 255)
 
 clock = pygame.time.Clock()
@@ -167,7 +172,7 @@ while running:
                 if enemies[row][col] is not None:
                     if bullet.colliderect(enemies[row][col]):
                         bullets.remove(bullet)
-                        player_score += 10
+                        player_score += point_val * ((num_rows - row))
                         enemies[row][col] = None
                         break
 
