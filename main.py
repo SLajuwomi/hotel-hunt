@@ -4,9 +4,6 @@ import sys
 from enemy import Enemy
 
 
-print(Enemy(10, 10, 50, 70, 15))
-# print(repr(Enemy(10, 10, 50, 70, 15)))
-
 pygame.init()
 pygame.font.init()
 font = pygame.font.SysFont("Arial", 30)
@@ -23,7 +20,7 @@ player_speed = 2
 player_lives = 3
 player_lives_triangle_x = 20
 player_score = 0
-point_val = 10
+point_val = 0
 triangle_color = (255, 255, 255)
 
 clock = pygame.time.Clock()
@@ -53,7 +50,13 @@ for row in range(num_rows):
     for col in range(max_enemies):
         enemy_x = left_margin + col * (enemy_width + spacing)
         enemy_y = enemy_start_y + row * (enemy_height + spacing)
-        enemy_rect = pygame.Rect(enemy_x, enemy_y, enemy_width, enemy_height)
+        if row == 0 or row == 1:
+            point_val = 30
+        elif row == 2 or row == 3:
+            point_val = 20
+        else:
+            point_val = 10
+        enemy_rect = Enemy(enemy_x, enemy_y, enemy_width, enemy_height, point_val)
         row_enemies.append(enemy_rect)
     enemies.append(row_enemies)
 
@@ -97,8 +100,8 @@ while running:
     screen.fill((0, 0, 0))
 
     # Print Player score
-    text_surface = font.render(f"{player_score}", True, (255, 255, 255))
-    screen.blit(text_surface, (10, 10))
+    score_surface = font.render(f"{player_score}", True, (255, 255, 255))
+    screen.blit(score_surface, (10, 10))
 
     top_of_triangle = (player_x, screen_height - footer_height - 20)
     bot_left_triangle = (player_x - 10, screen_height - footer_height)
@@ -108,6 +111,7 @@ while running:
     player = pygame.draw.polygon(screen, triangle_color, triangle_vertices)
 
     # Speed increase as score increase
+    # Bug - only increases when exactly a multiple of 100
     if player_score % 100 == 0 and player_score != 0:
         enemy_move_interval -= 7
 
@@ -140,6 +144,7 @@ while running:
             if enemy is not None:
                 pygame.draw.rect(screen, (255, 0, 0), enemy)
 
+    # Drawing enemy bullets and damaging player
     for enemy_bullet in list(enemy_bullets):
         enemy_bullet.y += 5
         pygame.draw.rect(screen, (0, 255, 0), enemy_bullet)
@@ -172,12 +177,15 @@ while running:
                 if enemies[row][col] is not None:
                     if bullet.colliderect(enemies[row][col]):
                         bullets.remove(bullet)
-                        player_score += point_val * ((num_rows - row))
+                        player_score += enemies[row][col].point_value
                         enemies[row][col] = None
                         break
 
+    fps_surface = font.render(f"{str(int(clock.get_fps()))}", True, (255, 255, 255))
+    screen.blit(fps_surface, (590, 10))
     pygame.display.flip()
 
     clock.tick(60)
+
 
 pygame.quit()
