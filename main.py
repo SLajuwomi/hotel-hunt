@@ -74,7 +74,6 @@ decremented5 = False
 
 
 while running:
-    enemies_that_can_shoot = []
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -85,7 +84,7 @@ while running:
     current_time = pygame.time.get_ticks()
 
     # Enemy shooting
-    # killed enemies are still shooting
+    enemies_that_can_shoot = []
     for col in range(max_enemies):
         for row in reversed(range(len(enemies))):
             if col < len(enemies[row]):
