@@ -4,7 +4,7 @@ This file is a merged representation of a subset of the codebase, containing spe
 This section contains a summary of this file.
 
 <purpose>
-This file contains a packed representation of a subset of the repository's contents that is considered the most important context.
+This file contains a packed representation of the entire repository's contents.
 It is designed to be easily consumable by AI systems for analysis, code review,
 or other automated processes.
 </purpose>
@@ -15,7 +15,7 @@ The content is organized as follows:
 2. Repository information
 3. Directory structure
 4. Repository files (if enabled)
-5. Multiple file entries, each consisting of:
+4. Repository files, each consisting of:
   - File path as an attribute
   - Full contents of the file
 </file_format>
@@ -38,11 +38,14 @@ The content is organized as follows:
 - Files are sorted by Git change count (files with more changes are at the bottom)
 </notes>
 
+<additional_info>
+
+</additional_info>
+
 </file_summary>
 
 <directory_structure>
 enemy.py
-grid.py
 main.py
 plan.md
 pygame_window_visualization.html
@@ -63,37 +66,6 @@ class Enemy(pygame.rect.Rect):
 
     def __str__(self):
         return f"X: {self.x}\nY: {self.y}\nWidth: {self.width}\nHeight: {self.height}\nPoint Value: {self.point_value}"
-</file>
-
-<file path="grid.py">
-from enemy import Enemy
-
-
-class Grid:
-    def __init__(self, num_rows, max_enemies, left_margin, enemy_width, spacing):
-        self.num_rows = num_rows
-        self.max_enemies = max_enemies
-        self.left_margin = left_margin
-        self.enemy_width = enemy_width
-        self.spacing = spacing
-
-    def make_grid(self):
-        for row in range(self.num_rows):
-            row_enemies = []
-            for col in range(self.max_enemies):
-                enemy_x = self.left_margin + col * (self.enemy_width + self.spacing)
-                enemy_y = self.enemy_start_y + row * (self.enemy_height + self.spacing)
-                if row == 0 or row == 1:
-                    point_val = 30
-                elif row == 2 or row == 3:
-                    point_val = 20
-                else:
-                    point_val = 10
-                enemy_rect = Enemy(
-                    self.enemy_x, enemy_y, self.enemy_width, enemy_height, point_val
-                )
-                row_enemies.append(enemy_rect)
-            enemies.append(row_enemies)
 </file>
 
 <file path="pygame_window_visualization.html">
@@ -319,8 +291,9 @@ should movement be a separate class? No, cause the movement is not constant thro
 
 sep 7
 
-- need barriers
-- increase speed as less enemies on screen
+- need barriers - just decrease size of barrier
+- I'm buront out of this honestly
+- increase speed as less enemies on screen - done
 - maybe add levels
   - funciton called increase level
   - if all enemies die increase level
@@ -382,8 +355,9 @@ enemies = []
 num_rows = 5
 enemy_start_y = 50
 enemy_direction = 1
+enemy_alive_count = max_enemies * num_rows
 enemy_speed = 1
-enemy_move_interval = 125
+enemy_move_interval = 125 
 last_enemy_move_time = 0
 for row in range(num_rows):
     row_enemies = []
@@ -457,36 +431,33 @@ while running:
 
     player = pygame.draw.polygon(screen, triangle_color, triangle_vertices)
 
-    enemy_alive_count = 0
-    for row in enemies:
-        for enemy in row:
-            if enemy is not None:
-                enemy_alive_count += 1
-
     if enemy_alive_count <= 45 and enemy_alive_count > 35 and not decremented45:
         print("here2")
-        enemy_move_interval -= 35
+        enemy_move_interval -= 45
         decremented45 = True
     elif enemy_alive_count <= 35 and enemy_alive_count > 25 and not decremented35:
         print("here3")
-        enemy_move_interval -= 35
+        enemy_move_interval -= 45
         decremented35 = True
     elif enemy_alive_count <= 25 and enemy_alive_count > 15 and not decremented25:
         print("here4")
-        enemy_move_interval -= 35
+        enemy_move_interval -= 45
         decremented25 = True
     elif enemy_alive_count <= 15 and enemy_alive_count > 5 and not decremented15:
         print("here5")
-        enemy_move_interval -= 35
+        enemy_move_interval -= 45
         decremented15 = True
     elif enemy_alive_count <= 5 and not decremented5:
         print("here6")
-        enemy_move_interval -= 35
+        enemy_move_interval -= 45
         decremented5 = True
-    print("move interval", enemy_move_interval)
+    # print("move interval", enemy_move_interval)
     # print("alive count", enemy_alive_count)
 
     # Enemy movement and reversal
+    # print("will move", current_time)
+    # print("last enemy move time", last_enemy_move_time)
+    # print("enemy_move_interval", enemy_move_interval)
     reverse_needed = False
     if current_time - last_enemy_move_time > enemy_move_interval:
         for row in enemies:
@@ -549,6 +520,7 @@ while running:
                     if bullet.colliderect(enemies[row][col]):
                         bullets.remove(bullet)
                         player_score += enemies[row][col].point_value
+                        enemy_alive_count -= 1
                         enemies[row][col] = None
                         break
 

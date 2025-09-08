@@ -17,8 +17,9 @@ should movement be a separate class? No, cause the movement is not constant thro
 
 sep 7
 
-- need barriers
-- increase speed as less enemies on screen
+- need barriers - just decrease size of barrier
+- I'm buront out of this honestly
+- increase speed as less enemies on screen - done
 - maybe add levels
   - funciton called increase level
   - if all enemies die increase level
@@ -27,3 +28,13 @@ sep 7
     - enemies closer to player?
     - faster shooting?
     - etc
+
+player class
+
+- actions
+- shooting
+- movement
+- attributes
+- lives
+- x position
+- y position

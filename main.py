@@ -74,6 +74,7 @@ decremented5 = False
 
 
 while running:
+    enemies_that_can_shoot = []
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -138,10 +139,13 @@ while running:
         print("here6")
         enemy_move_interval -= 45
         decremented5 = True
-    print("move interval", enemy_move_interval)
-    print("alive count", enemy_alive_count)
+    # print("move interval", enemy_move_interval)
+    # print("alive count", enemy_alive_count)
 
     # Enemy movement and reversal
+    # print("will move", current_time)
+    # print("last enemy move time", last_enemy_move_time)
+    # print("enemy_move_interval", enemy_move_interval)
     reverse_needed = False
     if current_time - last_enemy_move_time > enemy_move_interval:
         for row in enemies:
