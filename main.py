@@ -37,7 +37,7 @@ right_margin = 50
 
 usable_width = screen_width - left_margin - right_margin
 max_enemies = (usable_width + spacing) // (enemy_width + spacing)
-
+# 540 + 10 // 40 + 10 == 11
 enemies = []
 num_rows = 5
 enemy_start_y = 50
@@ -65,6 +65,12 @@ bullets = []
 
 running = True
 
+decremented45 = False
+decremented35 = False
+decremented25 = False
+decremented15 = False
+decremented5 = False
+
 
 while running:
     for event in pygame.event.get():
@@ -77,6 +83,7 @@ while running:
     current_time = pygame.time.get_ticks()
 
     # Enemy shooting
+    # killed enemies are still shooting
     for col in range(max_enemies):
         for row in reversed(range(len(enemies))):
             if col < len(enemies[row]):
@@ -110,10 +117,34 @@ while running:
 
     player = pygame.draw.polygon(screen, triangle_color, triangle_vertices)
 
-    # Speed increase as score increase
-    # Bug - only increases when exactly a multiple of 100
-    if player_score % 100 == 0 and player_score != 0:
-        enemy_move_interval -= 7
+    enemy_alive_count = 0
+    for row in enemies:
+        for enemy in row:
+            if enemy is not None:
+                enemy_alive_count += 1
+
+    if enemy_alive_count <= 45 and enemy_alive_count > 35 and not decremented45:
+        print("here2")
+        enemy_move_interval -= 35
+        decremented45 = True
+    elif enemy_alive_count <= 35 and enemy_alive_count > 25 and not decremented35:
+        print("here3")
+        enemy_move_interval -= 35
+        decremented35 = True
+    elif enemy_alive_count <= 25 and enemy_alive_count > 15 and not decremented25:
+        print("here4")
+        enemy_move_interval -= 35
+        decremented25 = True
+    elif enemy_alive_count <= 15 and enemy_alive_count > 5 and not decremented15:
+        print("here5")
+        enemy_move_interval -= 35
+        decremented15 = True
+    elif enemy_alive_count <= 5 and not decremented5:
+        print("here6")
+        enemy_move_interval -= 35
+        decremented5 = True
+    print("move interval", enemy_move_interval)
+    # print("alive count", enemy_alive_count)
 
     # Enemy movement and reversal
     reverse_needed = False

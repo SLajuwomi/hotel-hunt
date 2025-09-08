@@ -14,3 +14,16 @@ how to do this?
 while creating grid, we need to create new Enemy and based on the current row we define a different point value?
 
 should movement be a separate class? No, cause the movement is not constant throughout the game.
+
+sep 7
+
+- need barriers
+- increase speed as less enemies on screen
+- maybe add levels
+  - funciton called increase level
+  - if all enemies die increase level
+  - increase level changes attributes of Enemy objects and re passes them to the game
+    - more enemies?
+    - enemies closer to player?
+    - faster shooting?
+    - etc
