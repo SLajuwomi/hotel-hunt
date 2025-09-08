@@ -42,6 +42,7 @@ enemies = []
 num_rows = 5
 enemy_start_y = 50
 enemy_direction = 1
+enemy_alive_count = max_enemies * num_rows
 enemy_speed = 1
 enemy_move_interval = 125
 last_enemy_move_time = 0
@@ -117,34 +118,28 @@ while running:
 
     player = pygame.draw.polygon(screen, triangle_color, triangle_vertices)
 
-    enemy_alive_count = 0
-    for row in enemies:
-        for enemy in row:
-            if enemy is not None:
-                enemy_alive_count += 1
-
     if enemy_alive_count <= 45 and enemy_alive_count > 35 and not decremented45:
         print("here2")
-        enemy_move_interval -= 35
+        enemy_move_interval -= 45
         decremented45 = True
     elif enemy_alive_count <= 35 and enemy_alive_count > 25 and not decremented35:
         print("here3")
-        enemy_move_interval -= 35
+        enemy_move_interval -= 45
         decremented35 = True
     elif enemy_alive_count <= 25 and enemy_alive_count > 15 and not decremented25:
         print("here4")
-        enemy_move_interval -= 35
+        enemy_move_interval -= 45
         decremented25 = True
     elif enemy_alive_count <= 15 and enemy_alive_count > 5 and not decremented15:
         print("here5")
-        enemy_move_interval -= 35
+        enemy_move_interval -= 45
         decremented15 = True
     elif enemy_alive_count <= 5 and not decremented5:
         print("here6")
-        enemy_move_interval -= 35
+        enemy_move_interval -= 45
         decremented5 = True
     print("move interval", enemy_move_interval)
-    # print("alive count", enemy_alive_count)
+    print("alive count", enemy_alive_count)
 
     # Enemy movement and reversal
     reverse_needed = False
@@ -209,6 +204,7 @@ while running:
                     if bullet.colliderect(enemies[row][col]):
                         bullets.remove(bullet)
                         player_score += enemies[row][col].point_value
+                        enemy_alive_count -= 1
                         enemies[row][col] = None
                         break
 
