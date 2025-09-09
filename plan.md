@@ -38,3 +38,10 @@ player class
 - lives
 - x position
 - y position
+
+what needs to be done now
+
+- player shooting and killing enemies and increase player score
+- enemy movement and reversal
+- increasing speed as fewer enemies
+- draw sprites

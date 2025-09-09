@@ -9,58 +9,58 @@ pygame.init()
 pygame.font.init()
 font = pygame.font.SysFont("Arial", 30)
 
-screen_width = 640
-screen_height = 480
-footer_height = 40
-screen = pygame.display.set_mode((screen_width, screen_height))
+# screen_width = 640
+# screen_height = 480
+# footer_height = 40
+# screen = pygame.display.set_mode((screen_width, screen_height))
 
 
-player_x = screen_width // 2
-player_y_top = screen_height - footer_height - 20
-player_speed = 2
-player_lives = 3
-player_lives_triangle_x = 20
+# player_x = screen_width // 2
+# player_y_top = screen_height - footer_height - 20
+# player_speed = 2
+# player_lives = 3
+# player_lives_triangle_x = 20
 player_score = 0
 point_val = 0
-triangle_color = (255, 255, 255)
+# triangle_color = (255, 255, 255)
 
-clock = pygame.time.Clock()
+# clock = pygame.time.Clock()
 
-enemy_width = 40
-enemy_height = 30
-enemy_bullets = []
+# enemy_width = 40
+# enemy_height = 30
+# enemy_bullets = []
 enemy_shot_interval = 1000
-enemies_that_can_shoot = []
-last_enemy_shot_time = 0
-spacing = 10
-left_margin = 50
-right_margin = 50
+# enemies_that_can_shoot = []
+# last_enemy_shot_time = 0
+# spacing = 10
+# left_margin = 50
+# right_margin = 50
 
-usable_width = screen_width - left_margin - right_margin
-max_enemies = (usable_width + spacing) // (enemy_width + spacing)
+# usable_width = screen_width - left_margin - right_margin
+# max_enemies = (usable_width + spacing) // (enemy_width + spacing)
 # 540 + 10 // 40 + 10 == 11
-enemies = []
-num_rows = 5
-enemy_start_y = 50
+# enemies = []
+# num_rows = 5
+# enemy_start_y = 50
 enemy_direction = 1
 enemy_alive_count = max_enemies * num_rows
 enemy_speed = 1
 enemy_move_interval = 125
 last_enemy_move_time = 0
-for row in range(num_rows):
-    row_enemies = []
-    for col in range(max_enemies):
-        enemy_x = left_margin + col * (enemy_width + spacing)
-        enemy_y = enemy_start_y + row * (enemy_height + spacing)
-        if row == 0 or row == 1:
-            point_val = 30
-        elif row == 2 or row == 3:
-            point_val = 20
-        else:
-            point_val = 10
-        enemy_rect = Enemy(enemy_x, enemy_y, enemy_width, enemy_height, point_val)
-        row_enemies.append(enemy_rect)
-    enemies.append(row_enemies)
+# for row in range(num_rows):
+#     row_enemies = []
+#     for col in range(max_enemies):
+#         enemy_x = left_margin + col * (enemy_width + spacing)
+#         enemy_y = enemy_start_y + row * (enemy_height + spacing)
+#         if row == 0 or row == 1:
+#             point_val = 30
+#         elif row == 2 or row == 3:
+#             point_val = 20
+#         else:
+#             point_val = 10
+#         enemy_rect = Enemy(enemy_x, enemy_y, enemy_width, enemy_height, point_val)
+#         row_enemies.append(enemy_rect)
+#     enemies.append(row_enemies)
 
 bullets = []
 
@@ -75,50 +75,50 @@ decremented5 = False
 
 
 while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                bullets.append(pygame.Rect(player_x, player_y_top, 5, 5))
+    # for event in pygame.event.get():
+    #     if event.type == pygame.QUIT:
+    #         running = False
+    #     if event.type == pygame.KEYDOWN:
+    #         if event.key == pygame.K_SPACE:
+    #             bullets.append(pygame.Rect(player_x, player_y_top, 5, 5))
 
-    current_time = pygame.time.get_ticks()
+    # current_time = pygame.time.get_ticks()
 
     # Enemy shooting
-    enemies_that_can_shoot = []
-    for col in range(max_enemies):
-        for row in reversed(range(len(enemies))):
-            if col < len(enemies[row]):
-                enemy = enemies[row][col]
-                if enemy is not None:
-                    enemies_that_can_shoot.append(enemy)
-                    break
-    if current_time - last_enemy_shot_time > enemy_shot_interval:
-        if enemies_that_can_shoot:
-            shooter = random.choice(enemies_that_can_shoot)
-            enemy_bullets.append(pygame.Rect(shooter.centerx, shooter.bottom, 5, 5))
-            last_enemy_shot_time = current_time
+    # enemies_that_can_shoot = []
+    # for col in range(max_enemies):
+    #     for row in reversed(range(len(enemies))):
+    #         if col < len(enemies[row]):
+    #             enemy = enemies[row][col]
+    #             if enemy is not None:
+    #                 enemies_that_can_shoot.append(enemy)
+    #                 break
+    # if current_time - last_enemy_shot_time > enemy_shot_interval:
+    #     if enemies_that_can_shoot:
+    #         shooter = random.choice(enemies_that_can_shoot)
+    #         enemy_bullets.append(pygame.Rect(shooter.centerx, shooter.bottom, 5, 5))
+    #         last_enemy_shot_time = current_time
 
     # Player movement
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_a]:
-        player_x -= player_speed
-    if keys[pygame.K_d]:
-        player_x += player_speed
+    # keys = pygame.key.get_pressed()
+    # if keys[pygame.K_a]:
+    #     player_x -= player_speed
+    # if keys[pygame.K_d]:
+    #     player_x += player_speed
 
-    screen.fill((0, 0, 0))
+    # screen.fill((0, 0, 0))
 
     # Print Player score
-    score_surface = font.render(f"{player_score}", True, (255, 255, 255))
-    screen.blit(score_surface, (10, 10))
+    # score_surface = font.render(f"{player_score}", True, (255, 255, 255))
+    # screen.blit(score_surface, (10, 10))
 
-    Player.draw()
-    top_of_triangle = (player_x, screen_height - footer_height - 20)
-    bot_left_triangle = (player_x - 10, screen_height - footer_height)
-    bot_right_triangle = (player_x + 10, screen_height - footer_height)
-    triangle_vertices = [top_of_triangle, bot_left_triangle, bot_right_triangle]
+    # Player.draw()
+    # top_of_triangle = (player_x, screen_height - footer_height - 20)
+    # bot_left_triangle = (player_x - 10, screen_height - footer_height)
+    # bot_right_triangle = (player_x + 10, screen_height - footer_height)
+    # triangle_vertices = [top_of_triangle, bot_left_triangle, bot_right_triangle]
 
-    player = pygame.draw.polygon(screen, triangle_color, triangle_vertices)
+    # player = pygame.draw.polygon(screen, triangle_color, triangle_vertices)
 
     if enemy_alive_count <= 45 and enemy_alive_count > 35 and not decremented45:
         print("here2")
@@ -170,32 +170,32 @@ while running:
         last_enemy_move_time = current_time
 
     # Drawing enemies to screen
-    for row in enemies:
-        for enemy in row:
-            if enemy is not None:
-                pygame.draw.rect(screen, (255, 0, 0), enemy)
+    # for row in enemies:
+    #     for enemy in row:
+    #         if enemy is not None:
+    #             pygame.draw.rect(screen, (255, 0, 0), enemy)
 
     # Drawing enemy bullets and damaging player
-    for enemy_bullet in list(enemy_bullets):
-        enemy_bullet.y += 5
-        pygame.draw.rect(screen, (0, 255, 0), enemy_bullet)
-        if enemy_bullet.colliderect(player):
-            player_lives -= 1
-            enemy_bullets.remove(enemy_bullet)
-            if player_lives == 0:
-                print("GAME OVER!")
-                sys.exit()
-        if enemy_bullet.y > screen_height or enemy_bullet.y < 0:
-            enemy_bullets.remove(enemy_bullet)
+    # for enemy_bullet in list(enemy_bullets):
+    #     enemy_bullet.y += 5
+    #     pygame.draw.rect(screen, (0, 255, 0), enemy_bullet)
+    #     if enemy_bullet.colliderect(player):
+    #         player_lives -= 1
+    #         enemy_bullets.remove(enemy_bullet)
+    #         if player_lives == 0:
+    #             print("GAME OVER!")
+    #             sys.exit()
+    #     if enemy_bullet.y > screen_height or enemy_bullet.y < 0:
+    #         enemy_bullets.remove(enemy_bullet)
 
-    for i in range(player_lives):
-        if player_lives > 0:
-            life_tri_x = player_lives_triangle_x + (20 * i)
-            life_tri_top = (life_tri_x, screen_height - 20)
-            life_tri_bot_left = (life_tri_x - 10, screen_height)
-            life_tri_bot_right = (life_tri_x + 10, screen_height)
-            life_tri_vertices = [life_tri_top, life_tri_bot_left, life_tri_bot_right]
-            pygame.draw.polygon(screen, triangle_color, life_tri_vertices)
+    # for i in range(player_lives):
+    #     if player_lives > 0:
+    #         life_tri_x = player_lives_triangle_x + (20 * i)
+    #         life_tri_top = (life_tri_x, screen_height - 20)
+    #         life_tri_bot_left = (life_tri_x - 10, screen_height)
+    #         life_tri_bot_right = (life_tri_x + 10, screen_height)
+    #         life_tri_vertices = [life_tri_top, life_tri_bot_left, life_tri_bot_right]
+    #         pygame.draw.polygon(screen, triangle_color, life_tri_vertices)
 
     # Player shooting and killing enemies
     for bullet in list(bullets):
