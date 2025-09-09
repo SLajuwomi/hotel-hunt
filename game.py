@@ -1,5 +1,6 @@
 import pygame
 import random
+import sys
 from player import Player
 from enemy import Enemy
 
@@ -24,6 +25,7 @@ class Game:
         self.enemy_side_margin = 50
         self.last_enemy_shot_time = 0
         self.enemy_shot_interval = 125
+        self.enemy_bullet_speed = 5
 
         self.score = 0
         self.level = 1
@@ -50,6 +52,17 @@ class Game:
                 self.enemy_bullets.append(shooter.shoot())
                 self.last_enemy_shot_time = self.current_time
 
+        for enemy_bullet in self.enemy_bullets:
+            enemy_bullet.y += self.enemy_bullet_speed
+            if enemy_bullet.colliderect(self.player.rect):
+                self.player.lives -= 1
+                self.enemy_bullets.remove(enemy_bullet)
+                if self.player.lives == 0:
+                    print("GAME OVER!")
+                    sys.exit()
+            if enemy_bullet.y > self.screen.get_height() or enemy_bullet.y < 0:
+                self.enemy_bullets.remove(enemy_bullet)
+
     def draw(self):
         # clear screen
         # draw player, enemies, bullets
@@ -61,7 +74,7 @@ class Game:
                     pygame.draw.rect(self.screen, (255, 0, 0), enemy)
 
         for enemy_bullet in list(self.enemy_bullets):
-            enemy_bullet.y += 5
+            # enemy_bullet.y += 5
             pygame.draw.rect(self.screen, (0, 255, 0), enemy_bullet)
 
     def create_enemy_grid(self):
