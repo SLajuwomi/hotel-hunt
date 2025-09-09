@@ -2,8 +2,11 @@ import pygame
 
 
 class Player:
-    def __init__(self, x, y, speed, lives):
+    def __init__(self, x, y, speed, lives, bullets):
         self.rect = pygame.Rect(x, y, 20, 20)
+        self.speed = speed
+        self.lives = lives
+        self.bullets = bullets
 
     def move(self):
         keys = pygame.key.get_pressed()
@@ -17,3 +20,6 @@ class Player:
         bot_left_tri = (self.rect.left, self.rect.bottom)
         bot_right_tri = (self.rect.right, self.rect.bottom)
         pygame.draw.polygon(top_of_tri, bot_left_tri, bot_right_tri)
+
+    def shoot(self):
+        self.bullets.append(pygame.Rect(self.rect.x, self.rect.y, 5, 5))
