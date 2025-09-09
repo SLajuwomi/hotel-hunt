@@ -46,8 +46,10 @@ The content is organized as follows:
 
 <directory_structure>
 enemy.py
+game.py
 main.py
 plan.md
+player.py
 pygame_window_visualization.html
 README.md
 </directory_structure>
@@ -55,17 +57,110 @@ README.md
 <files>
 This section contains the contents of the repository's files.
 
-<file path="enemy.py">
+<file path="game.py">
 import pygame
+import random
+from player import Player
+from enemy import Enemy
 
 
-class Enemy(pygame.rect.Rect):
-    def __init__(self, x, y, width, height, point_value):
-        pygame.rect.Rect.__init__(self, x, y, width, height)
-        self.point_value = point_value
+class Game:
 
-    def __str__(self):
-        return f"X: {self.x}\nY: {self.y}\nWidth: {self.width}\nHeight: {self.height}\nPoint Value: {self.point_value}"
+    def __init__(self, screen):
+        self.screen = screen
+        self.is_running = True
+
+        self.player = Player()
+
+        self.enemies = []
+        self.enemy_bullets = []
+        self.enemies_that_can_shoot = []
+
+        self.enemy_width = 40
+        self.enemy_height = 30
+        self.enemy_spacing = 10
+        self.enemy_rows = 5
+        self.enemy_start_y = 50
+        self.enemy_side_margin = 50
+        self.last_enemy_shot_time = 0
+        self.enemy_shot_interval = 125
+
+        self.score = 0
+        self.level = 1
+        self.current_time = pygame.time.get_ticks()
+
+        self.create_enemy_grid()
+
+    def run(self):
+        while self.is_running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.is_running = False
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        self.player.shoot()
+
+        self.update()
+
+    def update(self):
+        Player.move()
+        if self.current_time - self.last_enemy_shot_time > self.enemy_shot_interval:
+            if self.enemies_that_can_shoot:
+                shooter = random.choice(self.enemies_that_can_shoot)
+                self.enemy_bullets.append(shooter.shoot())
+                self.last_enemy_shot_time = self.current_time
+
+    def draw(self):
+        # clear screen
+        # draw player, enemies, bullets
+        self.screen.fill((0, 0, 0))
+        Player.draw(self.screen, (255, 255, 255))
+        for row in self.enemies:
+            for enemy in row:
+                if enemy.is_alive:
+                    pygame.draw.rect(self.screen, (255, 0, 0), enemy)
+
+        for enemy_bullet in list(self.enemy_bullets):
+            enemy_bullet.y += 5
+            pygame.draw.rect(self.screen, (0, 255, 0), enemy_bullet)
+
+    def create_enemy_grid(self):
+        self.enemies.clear()
+        point_val = 0
+
+        left_margin = self.enemy_side_margin
+        right_margin = self.enemy_side_margin
+
+        usable_width = self.screen.width - left_margin - right_margin
+        max_enemies = (usable_width + self.enemy_spacing) // (
+            self.enemy_width + self.enemy_spacing
+        )
+
+        for row in range(self.enemy_rows):
+            row_enemies = []
+            for col in range(max_enemies):
+                enemy_x = left_margin + col * (self.enemy_width + self.enemy_spacing)
+                enemy_y = self.enemy_start_y + row * (
+                    self.enemy_height + self.enemy_spacing
+                )
+                if row == 0 or row == 1:
+                    point_val = 30
+                elif row == 2 or row == 3:
+                    point_val = 20
+                else:
+                    point_val = 10
+                enemy_rect = Enemy(
+                    enemy_x,
+                    enemy_y,
+                    self.enemy_width,
+                    self.enemy_height,
+                    point_val,
+                    is_alive=True,
+                )
+                row_enemies.append(enemy_rect)
+
+            self.enemies.append(row_enemies)
+            self.enemies_that_can_shoot = self.enemies[-1]
 </file>
 
 <file path="pygame_window_visualization.html">
@@ -271,6 +366,29 @@ class Enemy(pygame.rect.Rect):
 </html>
 </file>
 
+<file path="enemy.py">
+import pygame
+
+
+class Enemy(pygame.rect.Rect):
+    def __init__(self, x, y, width, height, point_value, is_alive):
+        pygame.rect.Rect.__init__(self, x, y, width, height)
+        self.point_value = point_value
+        self.is_alive = is_alive
+
+    def shoot(self):
+        return pygame.Rect(self.midbottom.x, self.midbottom.y, 5, 5)
+
+    def __str__(self):
+        return f"X: {self.x}\nY: {self.y}\nWidth: {self.width}\nHeight: {self.height}\nPoint Value: {self.point_value}"
+</file>
+
+<file path="README.md">
+# Hotel Hunt
+
+recreation of space invaders in pygame. first time making a game in pygame.
+</file>
+
 <file path="plan.md">
 ## Moving to Object Oriented
 
@@ -302,12 +420,45 @@ sep 7
     - enemies closer to player?
     - faster shooting?
     - etc
+
+player class
+
+- actions
+- shooting
+- movement
+- attributes
+- lives
+- x position
+- y position
 </file>
 
-<file path="README.md">
-# Hotel Hunt
+<file path="player.py">
+import pygame
 
-recreation of space invaders in pygame. first time making a game in pygame.
+
+class Player:
+    def __init__(self, x, y, speed, lives, bullets):
+        self.rect = pygame.Rect(x, y, 20, 20)
+        self.speed = speed
+        self.lives = lives
+        self.bullets = bullets
+
+    def move(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_a]:
+            self.rect.x -= self.speed
+        if keys[pygame.K_d]:
+            self.rect.x += self.speed
+
+    def draw(self, screen, color):
+        top_of_tri = (self.rect.centerx, self.rect.top)
+        bot_left_tri = (self.rect.left, self.rect.bottom)
+        bot_right_tri = (self.rect.right, self.rect.bottom)
+        tri_vertices = [top_of_tri, bot_left_tri, bot_right_tri]
+        pygame.draw.polygon(screen, color, tri_vertices)
+
+    def shoot(self):
+        self.bullets.append(pygame.Rect(self.rect.x, self.rect.y, 5, 5))
 </file>
 
 <file path="main.py">
@@ -315,6 +466,7 @@ import pygame
 import random
 import sys
 from enemy import Enemy
+from player import Player
 
 
 pygame.init()
@@ -357,7 +509,7 @@ enemy_start_y = 50
 enemy_direction = 1
 enemy_alive_count = max_enemies * num_rows
 enemy_speed = 1
-enemy_move_interval = 125 
+enemy_move_interval = 125
 last_enemy_move_time = 0
 for row in range(num_rows):
     row_enemies = []
@@ -397,7 +549,7 @@ while running:
     current_time = pygame.time.get_ticks()
 
     # Enemy shooting
-    # killed enemies are still shooting
+    enemies_that_can_shoot = []
     for col in range(max_enemies):
         for row in reversed(range(len(enemies))):
             if col < len(enemies[row]):
@@ -424,6 +576,7 @@ while running:
     score_surface = font.render(f"{player_score}", True, (255, 255, 255))
     screen.blit(score_surface, (10, 10))
 
+    Player.draw()
     top_of_triangle = (player_x, screen_height - footer_height - 20)
     bot_left_triangle = (player_x - 10, screen_height - footer_height)
     bot_right_triangle = (player_x + 10, screen_height - footer_height)

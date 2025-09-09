@@ -43,12 +43,26 @@ class Game:
         self.update()
 
     def update(self):
+        Player.move()
         if self.current_time - self.last_enemy_shot_time > self.enemy_shot_interval:
             if self.enemies_that_can_shoot:
                 shooter = random.choice(self.enemies_that_can_shoot)
                 self.enemy_bullets.append(shooter.shoot())
                 self.last_enemy_shot_time = self.current_time
-        Player.move()
+
+    def draw(self):
+        # clear screen
+        # draw player, enemies, bullets
+        self.screen.fill((0, 0, 0))
+        Player.draw(self.screen, (255, 255, 255))
+        for row in self.enemies:
+            for enemy in row:
+                if enemy.is_alive:
+                    pygame.draw.rect(self.screen, (255, 0, 0), enemy)
+
+        for enemy_bullet in list(self.enemy_bullets):
+            enemy_bullet.y += 5
+            pygame.draw.rect(self.screen, (0, 255, 0), enemy_bullet)
 
     def create_enemy_grid(self):
         self.enemies.clear()
@@ -76,7 +90,12 @@ class Game:
                 else:
                     point_val = 10
                 enemy_rect = Enemy(
-                    enemy_x, enemy_y, self.enemy_width, self.enemy_height, point_val
+                    enemy_x,
+                    enemy_y,
+                    self.enemy_width,
+                    self.enemy_height,
+                    point_val,
+                    is_alive=True,
                 )
                 row_enemies.append(enemy_rect)
 
