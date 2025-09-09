@@ -2,7 +2,7 @@ import pygame
 
 
 class Player:
-    def __init__(self, x, y, speed, lives, bullets, score):
+    def __init__(self, x, y, speed, lives, bullets):
         self.rect = pygame.Rect(x, y, 20, 20)
         self.speed = speed
         self.lives = lives

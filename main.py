@@ -198,20 +198,20 @@ while running:
     #         pygame.draw.polygon(screen, triangle_color, life_tri_vertices)
 
     # Player shooting and killing enemies
-    for bullet in list(bullets):
-        bullet.top -= 5
-        pygame.draw.rect(screen, (255, 0, 0), bullet)
-        if bullet.top > screen_height or bullet.top < 0:
-            bullets.remove(bullet)
-        for row in range(len(enemies)):
-            for col in range(len(enemies[row])):
-                if enemies[row][col] is not None:
-                    if bullet.colliderect(enemies[row][col]):
-                        bullets.remove(bullet)
-                        player_score += enemies[row][col].point_value
-                        enemy_alive_count -= 1
-                        enemies[row][col] = None
-                        break
+    # for bullet in list(bullets):
+    #     bullet.top -= 5
+    #     pygame.draw.rect(screen, (255, 0, 0), bullet)
+    #     if bullet.top > screen_height or bullet.top < 0:
+    #         bullets.remove(bullet)
+    #     for row in range(len(enemies)):
+    #         for col in range(len(enemies[row])):
+    #             if enemies[row][col] is not None:
+    #                 if bullet.colliderect(enemies[row][col]):
+    #                     bullets.remove(bullet)
+    #                     player_score += enemies[row][col].point_value
+    #                     enemy_alive_count -= 1
+    #                     enemies[row][col] = None
+    #                     break
 
     fps_surface = font.render(f"{str(int(clock.get_fps()))}", True, (255, 255, 255))
     screen.blit(fps_surface, (590, 10))

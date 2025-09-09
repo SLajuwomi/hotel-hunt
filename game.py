@@ -27,6 +27,8 @@ class Game:
         self.enemies = []
         self.enemy_bullets = []
         self.enemies_that_can_shoot = []
+        self.enemy_direction = 1
+        self.enemy_speed = 1
         self.enemy_width = 40
         self.enemy_height = 30
         self.enemy_spacing = 10
@@ -34,8 +36,10 @@ class Game:
         self.enemy_start_y = 50
         self.enemy_side_margin = 50
         self.last_enemy_shot_time = 0
-        self.enemy_shot_interval = 125
+        self.enemy_shot_interval = 1000
+        self.enemy_move_interval = 125
         self.enemy_bullet_speed = 5
+        self.last_enemy_move_time = 0
 
         self.usable_width = (
             self.screen_w - self.enemy_side_margin - self.enemy_side_margin
@@ -82,6 +86,19 @@ class Game:
                         if player_bullet.colliderect(self.enemies[row][col]):
                             self.player_bullets.remove(player_bullet)
                             self.score += self.enemies[row][col].point_value
+                            self.enemy_alive_count -= 1
+                            self.enemies[row][col].is_alive = False
+                            break
+        reverse_needed = False
+        if self.current_time - self.last_enemy_move_time > self.enemy_move_interval:
+            for row in self.enemies:
+                for enemy in row:
+                    if enemy.is_alive:
+                        enemy.x += self.enemy_direction * self.enemy_speed
+            for row in range(len(self.enemies)):
+                for col in range(len(self.enemies[row])):
+                    if self.enemies[row][col].is_alive
+                
 
         if self.current_time - self.last_enemy_shot_time > self.enemy_shot_interval:
             if self.enemies_that_can_shoot:
