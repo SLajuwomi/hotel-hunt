@@ -2,6 +2,7 @@ import pygame
 import random
 import sys
 from enemy import Enemy
+from player import Player
 
 
 pygame.init()
@@ -111,6 +112,7 @@ while running:
     score_surface = font.render(f"{player_score}", True, (255, 255, 255))
     screen.blit(score_surface, (10, 10))
 
+    Player.draw()
     top_of_triangle = (player_x, screen_height - footer_height - 20)
     bot_left_triangle = (player_x - 10, screen_height - footer_height)
     bot_right_triangle = (player_x + 10, screen_height - footer_height)
