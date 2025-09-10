@@ -32,16 +32,16 @@ class Game:
         self.enemy_width = 40
         self.enemy_height = 30
         self.enemy_spacing = 10
+        self.enemy_side_margin = 50
+        self.enemy_spacing = 10
         self.enemy_rows = 5
         self.enemy_start_y = 50
-        self.enemy_side_margin = 50
         self.last_enemy_shot_time = 0
         self.enemy_shot_interval = 1000
         self.enemy_move_interval = 1000
         self.enemy_max_speed_interval = 100
-
         self.enemy_bullet_speed = 5
-        self.enemy_alive_count = self.max_enemies * self.enemy_rows
+
         self.last_enemy_move_time = 0
 
         self.usable_width = (
@@ -50,6 +50,8 @@ class Game:
         self.max_enemies = (self.usable_width + self.enemy_spacing) // (
             self.enemy_width + self.enemy_spacing
         )
+
+        self.enemy_alive_count = self.max_enemies * self.enemy_rows
 
         self.total_enemies = self.max_enemies * self.enemy_rows
         self.percent_enemies_killed = (
@@ -77,7 +79,10 @@ class Game:
                     if event.key == pygame.K_SPACE:
                         self.player.shoot()
 
-        self.update()
+            self.create_enemy_grid()
+            self.draw()
+            self.update()
+        pygame.quit()
 
     def update(self):
         self.player.move()
@@ -143,10 +148,10 @@ class Game:
     def draw(self):
         self.screen.fill((0, 0, 0))
 
-        Player.draw(self.screen, self.triangle_color)
+        self.player.draw(self.screen, self.triangle_color)
 
         score_surface = self.font.render(f"{self.score}", True, (255, 255, 255))
-        self.screen.blit(score_surface)
+        self.screen.blit(score_surface, (10, 10))
 
         for row in self.enemies:
             for enemy in row:
