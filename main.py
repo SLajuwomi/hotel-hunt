@@ -20,8 +20,8 @@ font = pygame.font.SysFont("Arial", 30)
 # player_speed = 2
 # player_lives = 3
 # player_lives_triangle_x = 20
-player_score = 0
-point_val = 0
+# player_score = 0
+# point_val = 0
 # triangle_color = (255, 255, 255)
 
 # clock = pygame.time.Clock()
@@ -29,7 +29,7 @@ point_val = 0
 # enemy_width = 40
 # enemy_height = 30
 # enemy_bullets = []
-enemy_shot_interval = 1000
+# enemy_shot_interval = 1000
 # enemies_that_can_shoot = []
 # last_enemy_shot_time = 0
 # spacing = 10
@@ -42,11 +42,11 @@ enemy_shot_interval = 1000
 # enemies = []
 # num_rows = 5
 # enemy_start_y = 50
-enemy_direction = 1
-enemy_alive_count = max_enemies * num_rows
-enemy_speed = 1
-enemy_move_interval = 125
-last_enemy_move_time = 0
+# enemy_direction = 1
+# enemy_alive_count = max_enemies * num_rows
+# enemy_speed = 1
+# enemy_move_interval = 125
+# last_enemy_move_time = 0
 # for row in range(num_rows):
 #     row_enemies = []
 #     for col in range(max_enemies):
@@ -147,27 +147,27 @@ while running:
     # print("will move", current_time)
     # print("last enemy move time", last_enemy_move_time)
     # print("enemy_move_interval", enemy_move_interval)
-    reverse_needed = False
-    if current_time - last_enemy_move_time > enemy_move_interval:
-        for row in enemies:
-            for enemy in row:
-                if enemy is not None:
-                    enemy.x += enemy_direction * enemy_speed
-        for col in range(max_enemies):
-            for row in range(len(enemies)):
-                if enemies[row][col] is not None:
-                    if (
-                        enemies[row][col].bottomleft[0] <= 0
-                        or enemies[row][col].bottomright[0] >= screen_width
-                    ):
-                        reverse_needed = True
-        if reverse_needed:
-            enemy_direction *= -1
-            for nested_row in enemies:
-                for enemy in nested_row:
-                    if enemy is not None:
-                        enemy.y += 5
-        last_enemy_move_time = current_time
+    # reverse_needed = False
+    # if current_time - last_enemy_move_time > enemy_move_interval:
+    #     for row in enemies:
+    #         for enemy in row:
+    #             if enemy is not None:
+    #                 enemy.x += enemy_direction * enemy_speed
+    #     for col in range(max_enemies):
+    #         for row in range(len(enemies)):
+    #             if enemies[row][col] is not None:
+    #                 if (
+    #                     enemies[row][col].bottomleft[0] <= 0
+    #                     or enemies[row][col].bottomright[0] >= screen_width
+    #                 ):
+    #                     reverse_needed = True
+    #     if reverse_needed:
+    #         enemy_direction *= -1
+    #         for nested_row in enemies:
+    #             for enemy in nested_row:
+    #                 if enemy is not None:
+    #                     enemy.y += 5
+    #     last_enemy_move_time = current_time
 
     # Drawing enemies to screen
     # for row in enemies:

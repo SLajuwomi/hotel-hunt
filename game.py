@@ -37,8 +37,11 @@ class Game:
         self.enemy_side_margin = 50
         self.last_enemy_shot_time = 0
         self.enemy_shot_interval = 1000
-        self.enemy_move_interval = 125
+        self.enemy_move_interval = 1000
+        self.enemy_max_speed_interval = 100
+
         self.enemy_bullet_speed = 5
+        self.enemy_alive_count = self.max_enemies * self.enemy_rows
         self.last_enemy_move_time = 0
 
         self.usable_width = (
@@ -48,7 +51,10 @@ class Game:
             self.enemy_width + self.enemy_spacing
         )
 
-        self.enemy_alive_count = self.max_enemies * self.enemy_rows
+        self.total_enemies = self.max_enemies * self.enemy_rows
+        self.percent_enemies_killed = (
+            self.total_enemies - self.enemy_alive_count
+        ) / self.total_enemies
 
         self.triangle_color = (255, 255, 255)
         self.player_lives_triangle_x = 20
@@ -76,6 +82,10 @@ class Game:
     def update(self):
         self.player.move()
 
+        speed_range = self.enemy_move_interval - self.enemy_max_speed_interval
+        interval_reduction = speed_range * self.percent_enemies_killed
+        current_interval = self.enemy_move_interval - interval_reduction
+
         for player_bullet in list(self.player_bullets):
             player_bullet.top -= self.player_bullet_speed
             if player_bullet.top > self.screen_h or player_bullet.top < 0:
@@ -90,15 +100,26 @@ class Game:
                             self.enemies[row][col].is_alive = False
                             break
         reverse_needed = False
-        if self.current_time - self.last_enemy_move_time > self.enemy_move_interval:
+        if self.current_time - self.last_enemy_move_time > current_interval:
             for row in self.enemies:
                 for enemy in row:
                     if enemy.is_alive:
                         enemy.x += self.enemy_direction * self.enemy_speed
             for row in range(len(self.enemies)):
                 for col in range(len(self.enemies[row])):
-                    if self.enemies[row][col].is_alive
-                
+                    if self.enemies[row][col].is_alive:
+                        if (
+                            self.enemies[row][col].bottomleft[0] <= 0
+                            or self.enemies[row][col].bottomright[0] >= self.screen_w
+                        ):
+                            reverse_needed = True
+            if reverse_needed:
+                self.enemy_direction * -1
+                for nested_row in self.enemies:
+                    for enemy in nested_row:
+                        if enemy.is_alive:
+                            enemy.y += 5
+            self.last_enemy_move_time = self.current_time
 
         if self.current_time - self.last_enemy_shot_time > self.enemy_shot_interval:
             if self.enemies_that_can_shoot:
