@@ -82,7 +82,6 @@ class Game:
         self.all_barriers.append(self.barrier4.barrier_list)
         self.all_barriers.append(self.barrier5.barrier_list)
         self.all_barriers.append(self.barrier6.barrier_list)
-        print(self.all_barriers)
 
         self.create_enemy_grid()
 
@@ -110,6 +109,11 @@ class Game:
             player_bullet.top -= self.player_bullet_speed
             if player_bullet.top > self.screen_h or player_bullet.top < 0:
                 self.player_bullets.remove(player_bullet)
+            for barrier_list in self.all_barriers:
+                for barrier in barrier_list:
+                    if player_bullet.colliderect(barrier):
+                        self.player_bullets.remove(player_bullet)
+                        barrier_list.remove(barrier)
             for row in range(len(self.enemies)):
                 for col in range(len(self.enemies[row])):
                     if self.enemies[row][col].is_alive:
@@ -182,6 +186,12 @@ class Game:
                 if self.player.lives == 0:
                     print("GAME OVER!")
                     sys.exit()
+            for barrier_list in self.all_barriers:
+                for barrier in barrier_list:
+                    if enemy_bullet.colliderect(barrier):
+                        self.enemy_bullets.remove(enemy_bullet)
+                        barrier_list.remove(barrier)
+                        break
             if enemy_bullet.y > self.screen.get_height() or enemy_bullet.y < 0:
                 self.enemy_bullets.remove(enemy_bullet)
 
