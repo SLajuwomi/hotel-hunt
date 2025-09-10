@@ -100,6 +100,10 @@ class Game:
                 for col in range(len(self.enemies[row])):
                     if self.enemies[row][col].is_alive:
                         if player_bullet.colliderect(self.enemies[row][col]):
+                            self.player_bullets.remove(player_bullet)
+                            self.score += self.enemies[row][col].point_value
+                            self.enemy_alive_count -= 1
+                            self.enemies[row][col].is_alive = False
                             if self.enemies[row][col] in self.enemies_that_can_shoot:
                                 self.enemies_that_can_shoot.remove(
                                     self.enemies[row][col]
@@ -108,15 +112,11 @@ class Game:
                                     self.enemies_that_can_shoot.append(
                                         self.enemies[row - 1][col]
                                     )
-                            self.player_bullets.remove(player_bullet)
-                            self.score += self.enemies[row][col].point_value
-                            self.enemy_alive_count -= 1
-                            self.enemies[row][col].is_alive = False
                             break
         reverse_needed = False
         # print("current time", self.current_time)
         # print("last enemy move time", self.last_enemy_move_time)
-        print("current interval", self.enemy_move_interval)
+        # print("current interval", self.enemy_move_interval)
         if self.current_time - self.last_enemy_move_time > self.enemy_move_interval:
             for row in self.enemies:
                 for enemy in row:
@@ -220,4 +220,4 @@ class Game:
                 row_enemies.append(enemy_rect)
 
             self.enemies.append(row_enemies)
-            self.enemies_that_can_shoot = self.enemies[-1]
+        self.enemies_that_can_shoot = list(self.enemies[-1])
