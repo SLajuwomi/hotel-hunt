@@ -39,7 +39,7 @@ class Game:
         self.enemy_start_y = 50
         self.last_enemy_shot_time = 0
         self.enemy_shot_interval = 1000
-        self.enemy_move_interval = 125
+        self.enemy_move_interval = 350
         self.enemy_max_speed_interval = 0
         self.enemy_bullet_speed = 5
         self.enemy_killed = False
