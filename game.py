@@ -12,12 +12,13 @@ class Game:
         self.screen_h = self.screen.get_height()
         self.screen_w = self.screen.get_width()
         self.is_running = True
+        self.clock = pygame.time.Clock()
 
         self.player_bullets = []
 
         self.player = Player(
-            self.screen.get_width() // 2,
-            self.screen.get_height() - 60,
+            self.screen_w // 2,
+            self.screen_h - 60,
             2,
             3,
             self.player_bullets,
@@ -79,7 +80,6 @@ class Game:
                     if event.key == pygame.K_SPACE:
                         self.player.shoot()
 
-            self.create_enemy_grid()
             self.draw()
             self.update()
         pygame.quit()
@@ -105,6 +105,9 @@ class Game:
                             self.enemies[row][col].is_alive = False
                             break
         reverse_needed = False
+        print("current time", self.current_time)
+        print("last enemy move time", self.last_enemy_move_time)
+        print("current interval", current_interval)
         if self.current_time - self.last_enemy_move_time > current_interval:
             for row in self.enemies:
                 for enemy in row:
@@ -144,6 +147,7 @@ class Game:
                 self.enemy_bullets.remove(enemy_bullet)
 
         pygame.display.flip()
+        self.clock.tick(60)
 
     def draw(self):
         self.screen.fill((0, 0, 0))

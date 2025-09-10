@@ -9,6 +9,3 @@ class Enemy(pygame.rect.Rect):
 
     def shoot(self):
         return pygame.Rect(self.midbottom.x, self.midbottom.y, 5, 5)
-
-    def __str__(self):
-        return f"X: {self.x}\nY: {self.y}\nWidth: {self.width}\nHeight: {self.height}\nPoint Value: {self.point_value}"
