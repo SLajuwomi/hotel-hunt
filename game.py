@@ -3,6 +3,7 @@ import random
 import sys
 from player import Player
 from enemy import Enemy
+from barrier import Barrier
 
 
 class Game:
@@ -67,6 +68,22 @@ class Game:
         pygame.font.init()
         self.font = pygame.font.SysFont("Arial", 30)
 
+        self.barrier1 = Barrier(40, 350, 60, 40)
+        self.barrier2 = Barrier(self.barrier1.width + self.barrier1.x + 40, 350, 60, 40)
+        self.barrier3 = Barrier(self.barrier2.width + self.barrier2.x + 40, 350, 60, 40)
+        self.barrier4 = Barrier(self.barrier3.width + self.barrier3.x + 40, 350, 60, 40)
+        self.barrier5 = Barrier(self.barrier4.width + self.barrier4.x + 40, 350, 60, 40)
+        self.barrier6 = Barrier(self.barrier5.width + self.barrier5.x + 40, 350, 60, 40)
+
+        self.all_barriers = []
+        self.all_barriers.append(self.barrier1.barrier_list)
+        self.all_barriers.append(self.barrier2.barrier_list)
+        self.all_barriers.append(self.barrier3.barrier_list)
+        self.all_barriers.append(self.barrier4.barrier_list)
+        self.all_barriers.append(self.barrier5.barrier_list)
+        self.all_barriers.append(self.barrier6.barrier_list)
+        print(self.all_barriers)
+
         self.create_enemy_grid()
 
     def run(self):
@@ -84,8 +101,8 @@ class Game:
         pygame.quit()
 
     def update(self):
-        print(self.enemy_killed)
-        print()
+        # print(self.enemy_killed)
+        # print()
         self.current_time = pygame.time.get_ticks()
         self.player.move()
 
@@ -115,21 +132,21 @@ class Game:
         self.percent_enemies_killed = (
             self.total_enemies - self.enemy_alive_count
         ) / self.total_enemies
-        print("percent enemies killed", self.percent_enemies_killed)
+        # print("percent enemies killed", self.percent_enemies_killed)
 
         speed_range = self.enemy_move_interval - self.enemy_max_speed_interval
         interval_reduction = 0
         if self.enemy_killed:
             interval_reduction = speed_range * self.percent_enemies_killed  # problem
         self.enemy_move_interval = self.enemy_move_interval - interval_reduction
-        print("speed range", speed_range)
-        print("interval reduction", interval_reduction)
-        print("current interval", self.enemy_move_interval)
+        # print("speed range", speed_range)
+        # print("interval reduction", interval_reduction)
+        # print("current interval", self.enemy_move_interval)
 
         reverse_needed = False
-        print("current time", self.current_time)
-        print("last enemy move time", self.last_enemy_move_time)
-        print()
+        # print("current time", self.current_time)
+        # print("last enemy move time", self.last_enemy_move_time)
+        # print()
         if self.current_time - self.last_enemy_move_time > self.enemy_move_interval:
             for row in self.enemies:
                 for enemy in row:
@@ -176,8 +193,20 @@ class Game:
 
         self.player.draw(self.screen, self.triangle_color)
 
+        for x in self.all_barriers:
+            for y in x:
+                pygame.draw.rect(self.screen, (0, 255, 150), y)
+
         score_surface = self.font.render(f"{self.score}", True, (255, 255, 255))
         self.screen.blit(score_surface, (10, 10))
+
+        # test_barrier = pygame.rect.Rect(75, 350, 60, 40)
+        # test_barrier2 = pygame.rect.Rect(
+        #     test_barrier.width + test_barrier.x + 40, 350, 60, 40
+        # )
+
+        # pygame.draw.rect(self.screen, (0, 255, 50), test_barrier)
+        # pygame.draw.rect(self.screen, (0, 255, 50), test_barrier2)
 
         for row in self.enemies:
             for enemy in row:
