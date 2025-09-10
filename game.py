@@ -39,8 +39,8 @@ class Game:
         self.enemy_start_y = 50
         self.last_enemy_shot_time = 0
         self.enemy_shot_interval = 1000
-        self.enemy_move_interval = 1000
-        self.enemy_max_speed_interval = 100
+        self.enemy_move_interval = 125
+        self.enemy_max_speed_interval = 0
         self.enemy_bullet_speed = 5
 
         self.last_enemy_move_time = 0
@@ -64,7 +64,7 @@ class Game:
 
         self.score = 0
         self.level = 1
-        self.current_time = pygame.time.get_ticks()
+        self.current_time = 0
 
         pygame.font.init()
         self.font = pygame.font.SysFont("Arial", 30)
@@ -85,6 +85,7 @@ class Game:
         pygame.quit()
 
     def update(self):
+        self.current_time = pygame.time.get_ticks()
         self.player.move()
 
         speed_range = self.enemy_move_interval - self.enemy_max_speed_interval
@@ -105,9 +106,9 @@ class Game:
                             self.enemies[row][col].is_alive = False
                             break
         reverse_needed = False
-        print("current time", self.current_time)
-        print("last enemy move time", self.last_enemy_move_time)
-        print("current interval", current_interval)
+        # print("current time", self.current_time)
+        # print("last enemy move time", self.last_enemy_move_time)
+        # print("current interval", current_interval)
         if self.current_time - self.last_enemy_move_time > current_interval:
             for row in self.enemies:
                 for enemy in row:
@@ -194,9 +195,9 @@ class Game:
                 enemy_y = self.enemy_start_y + row * (
                     self.enemy_height + self.enemy_spacing
                 )
-                if row == 0 or row == 1:
+                if row == 0:
                     point_val = 30
-                elif row == 2 or row == 3:
+                elif row == 1 or row == 2:
                     point_val = 20
                 else:
                     point_val = 10

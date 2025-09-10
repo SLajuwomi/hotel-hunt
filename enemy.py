@@ -8,4 +8,4 @@ class Enemy(pygame.rect.Rect):
         self.is_alive = is_alive
 
     def shoot(self):
-        return pygame.Rect(self.midbottom.x, self.midbottom.y, 5, 5)
+        return pygame.Rect(self.midbottom[0], self.midbottom[1], 5, 5)
