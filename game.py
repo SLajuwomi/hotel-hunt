@@ -80,8 +80,8 @@ class Game:
                     if event.key == pygame.K_SPACE:
                         self.player.shoot()
 
-            self.draw()
             self.update()
+            self.draw()
         pygame.quit()
 
     def update(self):
@@ -90,7 +90,7 @@ class Game:
 
         speed_range = self.enemy_move_interval - self.enemy_max_speed_interval
         interval_reduction = speed_range * self.percent_enemies_killed
-        current_interval = self.enemy_move_interval - interval_reduction
+        self.enemy_move_interval = self.enemy_move_interval - interval_reduction
 
         for player_bullet in list(self.player_bullets):
             player_bullet.top -= self.player_bullet_speed
@@ -100,6 +100,14 @@ class Game:
                 for col in range(len(self.enemies[row])):
                     if self.enemies[row][col].is_alive:
                         if player_bullet.colliderect(self.enemies[row][col]):
+                            if self.enemies[row][col] in self.enemies_that_can_shoot:
+                                self.enemies_that_can_shoot.remove(
+                                    self.enemies[row][col]
+                                )
+                                if self.enemies[row - 1][col]:
+                                    self.enemies_that_can_shoot.append(
+                                        self.enemies[row - 1][col]
+                                    )
                             self.player_bullets.remove(player_bullet)
                             self.score += self.enemies[row][col].point_value
                             self.enemy_alive_count -= 1
@@ -108,8 +116,8 @@ class Game:
         reverse_needed = False
         # print("current time", self.current_time)
         # print("last enemy move time", self.last_enemy_move_time)
-        # print("current interval", current_interval)
-        if self.current_time - self.last_enemy_move_time > current_interval:
+        print("current interval", self.enemy_move_interval)
+        if self.current_time - self.last_enemy_move_time > self.enemy_move_interval:
             for row in self.enemies:
                 for enemy in row:
                     if enemy.is_alive:
@@ -123,7 +131,7 @@ class Game:
                         ):
                             reverse_needed = True
             if reverse_needed:
-                self.enemy_direction * -1
+                self.enemy_direction *= -1
                 for nested_row in self.enemies:
                     for enemy in nested_row:
                         if enemy.is_alive:

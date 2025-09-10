@@ -45,3 +45,10 @@ what needs to be done now
 - enemy movement and reversal
 - increasing speed as fewer enemies
 - draw sprites
+
+current problems - sep 10
+
+- still need to draw sprites
+- only bottom row of enemies is shooting
+- speed of enemies is not increasing as more die
+- levels
