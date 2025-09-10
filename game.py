@@ -42,6 +42,7 @@ class Game:
         self.enemy_move_interval = 125
         self.enemy_max_speed_interval = 0
         self.enemy_bullet_speed = 5
+        self.enemy_killed = False
 
         self.last_enemy_move_time = 0
 
@@ -55,9 +56,6 @@ class Game:
         self.enemy_alive_count = self.max_enemies * self.enemy_rows
 
         self.total_enemies = self.max_enemies * self.enemy_rows
-        self.percent_enemies_killed = (
-            self.total_enemies - self.enemy_alive_count
-        ) / self.total_enemies
 
         self.triangle_color = (255, 255, 255)
         self.player_lives_triangle_x = 20
@@ -79,18 +77,17 @@ class Game:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         self.player.shoot()
+            self.enemy_killed = False
 
             self.update()
             self.draw()
         pygame.quit()
 
     def update(self):
+        print(self.enemy_killed)
+        print()
         self.current_time = pygame.time.get_ticks()
         self.player.move()
-
-        speed_range = self.enemy_move_interval - self.enemy_max_speed_interval
-        interval_reduction = speed_range * self.percent_enemies_killed
-        self.enemy_move_interval = self.enemy_move_interval - interval_reduction
 
         for player_bullet in list(self.player_bullets):
             player_bullet.top -= self.player_bullet_speed
@@ -100,6 +97,7 @@ class Game:
                 for col in range(len(self.enemies[row])):
                     if self.enemies[row][col].is_alive:
                         if player_bullet.colliderect(self.enemies[row][col]):
+                            self.enemy_killed = True
                             self.player_bullets.remove(player_bullet)
                             self.score += self.enemies[row][col].point_value
                             self.enemy_alive_count -= 1
@@ -113,10 +111,25 @@ class Game:
                                         self.enemies[row - 1][col]
                                     )
                             break
+
+        self.percent_enemies_killed = (
+            self.total_enemies - self.enemy_alive_count
+        ) / self.total_enemies
+        print("percent enemies killed", self.percent_enemies_killed)
+
+        speed_range = self.enemy_move_interval - self.enemy_max_speed_interval
+        interval_reduction = 0
+        if self.enemy_killed:
+            interval_reduction = speed_range * self.percent_enemies_killed  # problem
+        self.enemy_move_interval = self.enemy_move_interval - interval_reduction
+        print("speed range", speed_range)
+        print("interval reduction", interval_reduction)
+        print("current interval", self.enemy_move_interval)
+
         reverse_needed = False
-        # print("current time", self.current_time)
-        # print("last enemy move time", self.last_enemy_move_time)
-        # print("current interval", self.enemy_move_interval)
+        print("current time", self.current_time)
+        print("last enemy move time", self.last_enemy_move_time)
+        print()
         if self.current_time - self.last_enemy_move_time > self.enemy_move_interval:
             for row in self.enemies:
                 for enemy in row:
