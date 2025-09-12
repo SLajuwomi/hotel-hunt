@@ -236,7 +236,7 @@ class Game:
                 if start_over_rect.collidepoint(event.pos):
                     self.run("restart")
                 if quit_rect.collidepoint(event.pos):
-                    # maybe print "Thanks for playing" with timeout then quit
+                    print("Thanks for playing!")
                     pygame.quit()
             pygame.display.flip()
 
@@ -288,6 +288,9 @@ class Game:
                 for enemy in row:
                     if enemy.is_alive:
                         enemy.x += self.enemy_direction * self.enemy_speed
+                        if enemy.colliderect(self.player):
+                            print("You have been hit!")
+                            self.run("game_over")
             for row in range(len(self.enemies)):
                 for col in range(len(self.enemies[row])):
                     if self.enemies[row][col].is_alive:
@@ -326,15 +329,6 @@ class Game:
                         break
             if enemy_bullet.y > self.screen.get_height() or enemy_bullet.y < 0:
                 self.enemy_bullets.remove(enemy_bullet)
-        # print("here1")
-        # for event in pygame.event.get():
-        #     print("here2")
-        #     if event.type == pygame.KEYDOWN:
-        #         if event.key == pygame.K_s:
-        #             print("new level")
-        #             self.level += 10
-        #             print("top self level", self.level)
-        #             self.start_new_level()
         if self.enemy_alive_count == 0:
             self.level += 10
             print("top self level", self.level)
