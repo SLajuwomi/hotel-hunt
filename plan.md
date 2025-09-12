@@ -60,3 +60,4 @@ current problems - sep 10
       - enemies closer to player?
       - faster shooting?
       - etc
+- barriers, have rectangle split into pixels so that when a bullet hits it, the pixel hit is removed? or the top line is decreased in size

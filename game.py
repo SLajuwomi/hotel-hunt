@@ -8,12 +8,13 @@ from barrier import Barrier
 
 class Game:
 
-    def __init__(self, screen):
+    def __init__(self, screen, state):
         self.screen = screen
         self.screen_h = self.screen.get_height()
         self.screen_w = self.screen.get_width()
         self.is_running = True
         self.clock = pygame.time.Clock()
+        self.state = state
 
         self.player_bullets = []
 
@@ -39,7 +40,7 @@ class Game:
         self.enemy_rows = 5
         self.enemy_start_y = 50
         self.last_enemy_shot_time = 0
-        self.enemy_shot_interval = 1000
+        self.enemy_shot_interval = 250
         self.enemy_move_interval = 350
         self.enemy_max_speed_interval = 0
         self.enemy_bullet_speed = 5
@@ -85,19 +86,155 @@ class Game:
 
         self.create_enemy_grid()
 
-    def run(self):
+    def run(self, state):
+        self.player.lives = 3
         while self.is_running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.is_running = False
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        self.player.shoot()
-            self.enemy_killed = False
+            if state == "menu":
+                self.draw_menu()
+            if state == "playing":
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        self.is_running = False
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_SPACE:
+                            self.player.shoot()
+                self.enemy_killed = False
 
-            self.update()
-            self.draw()
+                self.update()
+                self.draw()
+            if state == "game_over":
+                # print game over and final score
+                self.game_over_screen()
+            if state == "restart":
+                self.restart_game()
         pygame.quit()
+
+    def draw_menu(self):
+        start = self.font.render("START", True, (255, 255, 255))
+        quit = self.font.render("QUIT", True, (255, 255, 255))
+        quit_rect = quit.get_rect(center=(self.screen_w // 2, self.screen_h // 2 + 40))
+        start_rect = start.get_rect(
+            center=(self.screen_w // 2, self.screen_h // 2 - 20)
+        )
+        self.screen.fill((0, 0, 0))
+        self.screen.blit(start, start_rect)
+        self.screen.blit(quit, quit_rect)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.is_running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if start_rect.collidepoint(event.pos):
+                    self.run("playing")
+                if quit_rect.collidepoint(event.pos):
+                    pygame.quit()
+        pygame.display.flip()
+
+    def restart_game(self):
+        self.is_running = True
+        self.clock = pygame.time.Clock()
+
+        self.player_bullets = []
+
+        self.player = Player(
+            self.screen_w // 2,
+            self.screen_h - 60,
+            2,
+            3,
+            self.player_bullets,
+        )
+        self.player_bullet_speed = 5
+
+        self.enemies = []
+        self.enemy_bullets = []
+        self.enemies_that_can_shoot = []
+        self.enemy_direction = 1
+        self.enemy_speed = 1
+        self.enemy_width = 40
+        self.enemy_height = 30
+        self.enemy_spacing = 10
+        self.enemy_side_margin = 50
+        self.enemy_spacing = 10
+        self.enemy_rows = 5
+        self.enemy_start_y = 50
+        self.last_enemy_shot_time = 0
+        self.enemy_shot_interval = 250
+        self.enemy_move_interval = 350
+        self.enemy_max_speed_interval = 0
+        self.enemy_bullet_speed = 5
+        self.enemy_killed = False
+
+        self.last_enemy_move_time = 0
+
+        self.usable_width = (
+            self.screen_w - self.enemy_side_margin - self.enemy_side_margin
+        )
+        self.max_enemies = (self.usable_width + self.enemy_spacing) // (
+            self.enemy_width + self.enemy_spacing
+        )
+
+        self.enemy_alive_count = self.max_enemies * self.enemy_rows
+
+        self.total_enemies = self.max_enemies * self.enemy_rows
+
+        self.triangle_color = (255, 255, 255)
+        self.player_lives_triangle_x = 20
+
+        self.score = 0
+        self.level = 1
+        self.current_time = 0
+
+        pygame.font.init()
+        self.font = pygame.font.SysFont("Arial", 30)
+
+        self.barrier1 = Barrier(40, 350, 60, 40)
+        self.barrier2 = Barrier(self.barrier1.width + self.barrier1.x + 40, 350, 60, 40)
+        self.barrier3 = Barrier(self.barrier2.width + self.barrier2.x + 40, 350, 60, 40)
+        self.barrier4 = Barrier(self.barrier3.width + self.barrier3.x + 40, 350, 60, 40)
+        self.barrier5 = Barrier(self.barrier4.width + self.barrier4.x + 40, 350, 60, 40)
+        self.barrier6 = Barrier(self.barrier5.width + self.barrier5.x + 40, 350, 60, 40)
+
+        self.all_barriers = []
+        self.all_barriers.append(self.barrier1.barrier_list)
+        self.all_barriers.append(self.barrier2.barrier_list)
+        self.all_barriers.append(self.barrier3.barrier_list)
+        self.all_barriers.append(self.barrier4.barrier_list)
+        self.all_barriers.append(self.barrier5.barrier_list)
+        self.all_barriers.append(self.barrier6.barrier_list)
+
+        self.create_enemy_grid()
+        self.run("playing")
+
+    def game_over_screen(self):
+        game_over = self.font.render("GAME OVER!", True, (255, 0, 0))
+        game_over_rect = game_over.get_rect(
+            center=(self.screen_w // 2, self.screen_h // 2 - 60)
+        )
+        final_score = self.font.render(f"{self.score}", True, (255, 255, 255))
+        final_score_rect = final_score.get_rect(
+            center=(self.screen_w // 2, self.screen_h // 2 - 20)
+        )
+        start_over = self.font.render("START OVER!", True, (255, 255, 255))
+        start_over_rect = start_over.get_rect(
+            center=(self.screen_w // 2, self.screen_h // 2 + 40)
+        )
+        quit = self.font.render("QUIT", True, (255, 255, 255))
+        quit_rect = quit.get_rect(center=(self.screen_w // 2, self.screen_h // 2 + 80))
+
+        self.screen.fill((0, 0, 0))
+        self.screen.blit(game_over, game_over_rect)
+        self.screen.blit(final_score, final_score_rect)
+        self.screen.blit(start_over, start_over_rect)
+        self.screen.blit(quit, quit_rect)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.is_running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if start_over_rect.collidepoint(event.pos):
+                    self.run("restart")
+                if quit_rect.collidepoint(event.pos):
+                    # maybe print "Thanks for playing" with timeout then quit
+                    pygame.quit()
+            pygame.display.flip()
 
     def update(self):
         # print(self.enemy_killed)
@@ -127,7 +264,7 @@ class Game:
                                 self.enemies_that_can_shoot.remove(
                                     self.enemies[row][col]
                                 )
-                                if self.enemies[row - 1][col]:
+                                if self.enemies[row - 1][col].is_alive:
                                     self.enemies_that_can_shoot.append(
                                         self.enemies[row - 1][col]
                                     )
@@ -185,7 +322,7 @@ class Game:
                 self.enemy_bullets.remove(enemy_bullet)
                 if self.player.lives == 0:
                     print("GAME OVER!")
-                    sys.exit()
+                    self.run("game_over")
             for barrier_list in self.all_barriers:
                 for barrier in barrier_list:
                     if enemy_bullet.colliderect(barrier):
