@@ -15,6 +15,7 @@ class Game:
         self.is_running = True
         self.clock = pygame.time.Clock()
         self.state = state
+        self.level = 10
 
         self.player_bullets = []
 
@@ -98,6 +99,9 @@ class Game:
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_SPACE:
                             self.player.shoot()
+                        if event.key == pygame.K_s:
+                            self.level += 1
+                            self.start_new_level()
                 self.enemy_killed = False
 
                 self.update()
@@ -237,8 +241,6 @@ class Game:
             pygame.display.flip()
 
     def update(self):
-        # print(self.enemy_killed)
-        # print()
         self.current_time = pygame.time.get_ticks()
         self.player.move()
 
@@ -273,21 +275,14 @@ class Game:
         self.percent_enemies_killed = (
             self.total_enemies - self.enemy_alive_count
         ) / self.total_enemies
-        # print("percent enemies killed", self.percent_enemies_killed)
 
         speed_range = self.enemy_move_interval - self.enemy_max_speed_interval
         interval_reduction = 0
         if self.enemy_killed:
             interval_reduction = speed_range * self.percent_enemies_killed  # problem
         self.enemy_move_interval = self.enemy_move_interval - interval_reduction
-        # print("speed range", speed_range)
-        # print("interval reduction", interval_reduction)
-        # print("current interval", self.enemy_move_interval)
 
         reverse_needed = False
-        # print("current time", self.current_time)
-        # print("last enemy move time", self.last_enemy_move_time)
-        # print()
         if self.current_time - self.last_enemy_move_time > self.enemy_move_interval:
             for row in self.enemies:
                 for enemy in row:
@@ -331,9 +326,98 @@ class Game:
                         break
             if enemy_bullet.y > self.screen.get_height() or enemy_bullet.y < 0:
                 self.enemy_bullets.remove(enemy_bullet)
+        # print("here1")
+        # for event in pygame.event.get():
+        #     print("here2")
+        #     if event.type == pygame.KEYDOWN:
+        #         if event.key == pygame.K_s:
+        #             print("new level")
+        #             self.level += 10
+        #             print("top self level", self.level)
+        #             self.start_new_level()
+        if self.enemy_alive_count == 0:
+            self.level += 10
+            print("top self level", self.level)
+            self.start_new_level()
 
         pygame.display.flip()
         self.clock.tick(60)
+
+    def start_new_level(self):
+        self.is_running = True
+        self.clock = pygame.time.Clock()
+
+        self.player_bullets = []
+
+        self.player = Player(
+            self.screen_w // 2,
+            self.screen_h - 60,
+            2,
+            3,
+            self.player_bullets,
+        )
+        self.player_bullet_speed = 5
+
+        self.enemies = []
+        self.enemy_bullets = []
+        self.enemies_that_can_shoot = []
+        self.enemy_direction = 1
+        self.enemy_speed = 1
+        self.enemy_width = 40
+        self.enemy_height = 30
+        self.enemy_spacing = 10
+        self.enemy_side_margin = 50
+        self.enemy_spacing = 10
+        self.enemy_rows = 5
+        self.enemy_start_y = 50 + (self.level * 10)
+        print(self.enemy_start_y)
+        self.last_enemy_shot_time = 0
+        self.enemy_shot_interval = 250
+        self.enemy_move_interval = 350
+        self.enemy_max_speed_interval = 0
+        self.enemy_bullet_speed = 5
+        self.enemy_killed = False
+
+        self.last_enemy_move_time = 0
+
+        self.usable_width = (
+            self.screen_w - self.enemy_side_margin - self.enemy_side_margin
+        )
+        self.max_enemies = (self.usable_width + self.enemy_spacing) // (
+            self.enemy_width + self.enemy_spacing
+        )
+
+        self.enemy_alive_count = self.max_enemies * self.enemy_rows
+
+        self.total_enemies = self.max_enemies * self.enemy_rows
+
+        self.triangle_color = (255, 255, 255)
+        self.player_lives_triangle_x = 20
+
+        self.score = self.score
+        print("current score", self.score)
+        self.current_time = 0
+
+        pygame.font.init()
+        self.font = pygame.font.SysFont("Arial", 30)
+
+        self.barrier1 = Barrier(40, 350, 60, 40)
+        self.barrier2 = Barrier(self.barrier1.width + self.barrier1.x + 40, 350, 60, 40)
+        self.barrier3 = Barrier(self.barrier2.width + self.barrier2.x + 40, 350, 60, 40)
+        self.barrier4 = Barrier(self.barrier3.width + self.barrier3.x + 40, 350, 60, 40)
+        self.barrier5 = Barrier(self.barrier4.width + self.barrier4.x + 40, 350, 60, 40)
+        self.barrier6 = Barrier(self.barrier5.width + self.barrier5.x + 40, 350, 60, 40)
+
+        self.all_barriers = []
+        self.all_barriers.append(self.barrier1.barrier_list)
+        self.all_barriers.append(self.barrier2.barrier_list)
+        self.all_barriers.append(self.barrier3.barrier_list)
+        self.all_barriers.append(self.barrier4.barrier_list)
+        self.all_barriers.append(self.barrier5.barrier_list)
+        self.all_barriers.append(self.barrier6.barrier_list)
+
+        self.create_enemy_grid()
+        self.run("playing")
 
     def draw(self):
         self.screen.fill((0, 0, 0))
@@ -346,15 +430,6 @@ class Game:
 
         score_surface = self.font.render(f"{self.score}", True, (255, 255, 255))
         self.screen.blit(score_surface, (10, 10))
-
-        # test_barrier = pygame.rect.Rect(75, 350, 60, 40)
-        # test_barrier2 = pygame.rect.Rect(
-        #     test_barrier.width + test_barrier.x + 40, 350, 60, 40
-        # )
-
-        # pygame.draw.rect(self.screen, (0, 255, 50), test_barrier)
-        # pygame.draw.rect(self.screen, (0, 255, 50), test_barrier2)
-
         for row in self.enemies:
             for enemy in row:
                 if enemy.is_alive:
