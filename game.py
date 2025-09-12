@@ -41,7 +41,7 @@ class Game:
         self.enemy_rows = 5
         self.enemy_start_y = 50
         self.last_enemy_shot_time = 0
-        self.enemy_shot_interval = 250
+        self.enemy_shot_interval = 500
         self.enemy_move_interval = 350
         self.enemy_max_speed_interval = 0
         self.enemy_bullet_speed = 5
@@ -84,6 +84,13 @@ class Game:
         self.all_barriers.append(self.barrier4.barrier_list)
         self.all_barriers.append(self.barrier5.barrier_list)
         self.all_barriers.append(self.barrier6.barrier_list)
+
+        self.player_ship = pygame.image.load(
+            "game-art/space-invaders-ship.png"
+        ).convert_alpha()
+        self.player_ship_rect = self.player_ship.get_rect()
+        self.player_ship_rect.center = (self.screen_w // 2, self.screen_h - 60)
+        print(self.player_ship_rect.x)
 
         self.create_enemy_grid()
 
@@ -415,7 +422,7 @@ class Game:
 
     def draw(self):
         self.screen.fill((0, 0, 0))
-
+        # self.screen.blit(self.player_ship, self.player_ship_rect)
         self.player.draw(self.screen, self.triangle_color)
 
         for x in self.all_barriers:

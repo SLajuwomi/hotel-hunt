@@ -3,7 +3,12 @@ import pygame
 
 class Player:
     def __init__(self, x, y, speed, lives, bullets):
-        self.rect = pygame.Rect(x, y, 20, 20)
+        self.player_ship = pygame.image.load(
+            "game-art/space-invaders-ship-selected.png"
+        ).convert_alpha()
+        self.player_ship_rect = self.player_ship.get_rect()
+        self.player_ship_rect.center = (x, y)
+        self.rect = self.player_ship_rect
         self.speed = speed
         self.lives = lives
         self.bullets = bullets
@@ -16,11 +21,12 @@ class Player:
             self.rect.x += self.speed
 
     def draw(self, screen, color):
-        top_of_tri = (self.rect.centerx, self.rect.top)
-        bot_left_tri = (self.rect.left, self.rect.bottom)
-        bot_right_tri = (self.rect.right, self.rect.bottom)
-        tri_vertices = [top_of_tri, bot_left_tri, bot_right_tri]
-        pygame.draw.polygon(screen, color, tri_vertices)
+        screen.blit(self.player_ship, self.player_ship_rect)
+        # top_of_tri = (self.rect.centerx, self.rect.top)
+        # bot_left_tri = (self.rect.left, self.rect.bottom)
+        # bot_right_tri = (self.rect.right, self.rect.bottom)
+        # tri_vertices = [top_of_tri, bot_left_tri, bot_right_tri]
+        # pygame.draw.polygon(screen, color, tri_vertices)
 
     def shoot(self):
-        self.bullets.append(pygame.Rect(self.rect.x, self.rect.y, 5, 5))
+        self.bullets.append(pygame.Rect(self.rect.centerx, self.rect.centery, 5, 5))
