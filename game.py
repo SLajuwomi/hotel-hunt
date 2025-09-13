@@ -4,6 +4,7 @@ import sys
 from player import Player
 from enemy import Enemy
 from barrier import Barrier
+import settings
 
 
 class Game:
@@ -22,29 +23,28 @@ class Game:
         self.player = Player(
             self.screen_w // 2,
             self.screen_h - 60,
-            2,
-            3,
+            settings.PLAYER_SPEED,
+            settings.PLAYER_LIVES,
             self.player_bullets,
         )
-        self.player_bullet_speed = 5
+        self.player_bullet_speed = settings.PLAYER_BULLET_SPEED
 
         self.enemies = []
         self.enemy_bullets = []
         self.enemies_that_can_shoot = []
         self.enemy_direction = 1
-        self.enemy_speed = 1
-        self.enemy_width = 40
-        self.enemy_height = 30
-        self.enemy_spacing = 10
-        self.enemy_side_margin = 50
-        self.enemy_spacing = 10
-        self.enemy_rows = 5
-        self.enemy_start_y = 50
+        self.enemy_speed = settings.ENEMY_SPEED
+        self.enemy_width = settings.ENEMY_WIDTH
+        self.enemy_height = settings.ENEMY_HEIGHT
+        self.enemy_spacing = settings.ENEMY_SPACING
+        self.enemy_side_margin = settings.ENEMY_SIDE_MARGIN
+        self.enemy_rows = settings.ENEMY_ROWS
+        self.enemy_start_y = settings.ENEMY_STARY_Y
         self.last_enemy_shot_time = 0
-        self.enemy_shot_interval = 500
-        self.enemy_move_interval = 350
-        self.enemy_max_speed_interval = 0
-        self.enemy_bullet_speed = 5
+        self.enemy_shot_interval = settings.ENEMY_SHOT_INTERVAL
+        self.enemy_move_interval = settings.ENEMY_MOVE_INTERVAL
+        self.enemy_max_speed_interval = settings.ENEMY_MAX_SPEED_INTERVAL
+        self.enemy_bullet_speed = settings.ENEMY_BULLET_SPEED
         self.enemy_killed = False
 
         self.last_enemy_move_time = 0
@@ -60,8 +60,8 @@ class Game:
 
         self.total_enemies = self.max_enemies * self.enemy_rows
 
-        self.triangle_color = (255, 255, 255)
-        self.player_lives_triangle_x = 20
+        self.triangle_color = settings.PLAYER_LIVES_TRI_COLOR
+        self.player_lives_triangle_x = settings.PLAYER_LIVES_TRI_X
 
         self.score = 0
         self.level = 1
@@ -70,21 +70,26 @@ class Game:
         pygame.font.init()
         self.font = pygame.font.SysFont("Arial", 30)
 
-        self.barrier1 = Barrier(70, 350)
+        self.barrier1 = Barrier(settings.BARRIER_X, settings.BARRIER_Y)
         self.barrier2 = Barrier(
-            self.barrier1.orig_barrier_img.get_width() + self.barrier1.x + 40, 350
+            self.barrier1.orig_barrier_img.get_width() + self.barrier1.x + 40,
+            settings.BARRIER_Y,
         )
         self.barrier3 = Barrier(
-            self.barrier2.orig_barrier_img.get_width() + self.barrier2.x + 40, 350
+            self.barrier2.orig_barrier_img.get_width() + self.barrier2.x + 40,
+            settings.BARRIER_Y,
         )
         self.barrier4 = Barrier(
-            self.barrier3.orig_barrier_img.get_width() + self.barrier3.x + 40, 350
+            self.barrier3.orig_barrier_img.get_width() + self.barrier3.x + 40,
+            settings.BARRIER_Y,
         )
         self.barrier5 = Barrier(
-            self.barrier4.orig_barrier_img.get_width() + self.barrier4.x + 40, 350
+            self.barrier4.orig_barrier_img.get_width() + self.barrier4.x + 40,
+            settings.BARRIER_Y,
         )
         self.barrier6 = Barrier(
-            self.barrier5.orig_barrier_img.get_width() + self.barrier5.x + 40, 350
+            self.barrier5.orig_barrier_img.get_width() + self.barrier5.x + 40,
+            settings.BARRIER_Y,
         )
 
         self.all_barriers = []
@@ -131,8 +136,8 @@ class Game:
         pygame.quit()
 
     def draw_menu(self):
-        start = self.font.render("START", True, (255, 255, 255))
-        quit = self.font.render("QUIT", True, (255, 255, 255))
+        start = self.font.render("START", True, settings.FONT_COLOR)
+        quit = self.font.render("QUIT", True, settings.FONT_COLOR)
         quit_rect = quit.get_rect(center=(self.screen_w // 2, self.screen_h // 2 + 40))
         start_rect = start.get_rect(
             center=(self.screen_w // 2, self.screen_h // 2 - 20)
@@ -169,19 +174,18 @@ class Game:
         self.enemy_bullets = []
         self.enemies_that_can_shoot = []
         self.enemy_direction = 1
-        self.enemy_speed = 1
-        self.enemy_width = 40
-        self.enemy_height = 30
-        self.enemy_spacing = 10
-        self.enemy_side_margin = 50
-        self.enemy_spacing = 10
-        self.enemy_rows = 5
-        self.enemy_start_y = 50
+        self.enemy_speed = settings.ENEMY_SPEED
+        self.enemy_width = settings.ENEMY_WIDTH
+        self.enemy_height = settings.ENEMY_HEIGHT
+        self.enemy_spacing = settings.ENEMY_SPACING
+        self.enemy_side_margin = settings.ENEMY_SIDE_MARGIN
+        self.enemy_rows = settings.ENEMY_ROWS
+        self.enemy_start_y = settings.ENEMY_STARY_Y
         self.last_enemy_shot_time = 0
-        self.enemy_shot_interval = 250
-        self.enemy_move_interval = 350
-        self.enemy_max_speed_interval = 0
-        self.enemy_bullet_speed = 5
+        self.enemy_shot_interval = settings.ENEMY_SHOT_INTERVAL
+        self.enemy_move_interval = settings.ENEMY_MOVE_INTERVAL
+        self.enemy_max_speed_interval = settings.ENEMY_MAX_SPEED_INTERVAL
+        self.enemy_bullet_speed = settings.ENEMY_BULLET_SPEED
         self.enemy_killed = False
 
         self.last_enemy_move_time = 0
@@ -197,8 +201,8 @@ class Game:
 
         self.total_enemies = self.max_enemies * self.enemy_rows
 
-        self.triangle_color = (255, 255, 255)
-        self.player_lives_triangle_x = 20
+        self.triangle_color = settings.PLAYER_LIVES_TRI_COLOR
+        self.player_lives_triangle_x = settings.PLAYER_LIVES_TRI_X
 
         self.score = 0
         self.level = 1
@@ -207,21 +211,26 @@ class Game:
         pygame.font.init()
         self.font = pygame.font.SysFont("Arial", 30)
 
-        self.barrier1 = Barrier(70, 350)
+        self.barrier1 = Barrier(settings.BARRIER_X, settings.BARRIER_Y)
         self.barrier2 = Barrier(
-            self.barrier1.orig_barrier_img.get_width() + self.barrier1.x + 40, 350
+            self.barrier1.orig_barrier_img.get_width() + self.barrier1.x + 40,
+            settings.BARRIER_Y,
         )
         self.barrier3 = Barrier(
-            self.barrier2.orig_barrier_img.get_width() + self.barrier2.x + 40, 350
+            self.barrier2.orig_barrier_img.get_width() + self.barrier2.x + 40,
+            settings.BARRIER_Y,
         )
         self.barrier4 = Barrier(
-            self.barrier3.orig_barrier_img.get_width() + self.barrier3.x + 40, 350
+            self.barrier3.orig_barrier_img.get_width() + self.barrier3.x + 40,
+            settings.BARRIER_Y,
         )
         self.barrier5 = Barrier(
-            self.barrier4.orig_barrier_img.get_width() + self.barrier4.x + 40, 350
+            self.barrier4.orig_barrier_img.get_width() + self.barrier4.x + 40,
+            settings.BARRIER_Y,
         )
         self.barrier6 = Barrier(
-            self.barrier5.orig_barrier_img.get_width() + self.barrier5.x + 40, 350
+            self.barrier5.orig_barrier_img.get_width() + self.barrier5.x + 40,
+            settings.BARRIER_Y,
         )
 
         self.all_barriers = []
@@ -240,15 +249,15 @@ class Game:
         game_over_rect = game_over.get_rect(
             center=(self.screen_w // 2, self.screen_h // 2 - 60)
         )
-        final_score = self.font.render(f"{self.score}", True, (255, 255, 255))
+        final_score = self.font.render(f"{self.score}", True, settings.FONT_COLOR)
         final_score_rect = final_score.get_rect(
             center=(self.screen_w // 2, self.screen_h // 2 - 20)
         )
-        start_over = self.font.render("START OVER!", True, (255, 255, 255))
+        start_over = self.font.render("START OVER!", True, settings.FONT_COLOR)
         start_over_rect = start_over.get_rect(
             center=(self.screen_w // 2, self.screen_h // 2 + 40)
         )
-        quit = self.font.render("QUIT", True, (255, 255, 255))
+        quit = self.font.render("QUIT", True, settings.FONT_COLOR)
         quit_rect = quit.get_rect(center=(self.screen_w // 2, self.screen_h // 2 + 80))
 
         self.screen.fill((0, 0, 0))
@@ -271,6 +280,11 @@ class Game:
         self.current_time = pygame.time.get_ticks()
         self.player.move()
 
+        for row in self.enemies:
+            for enemy in row:
+                if enemy.is_alive:
+                    enemy.update()
+
         for player_bullet in list(self.player_bullets):
             player_bullet.top -= self.player_bullet_speed
             if player_bullet.top > self.screen_h or player_bullet.top < 0:
@@ -285,7 +299,7 @@ class Game:
             for row in range(len(self.enemies)):
                 for col in range(len(self.enemies[row])):
                     if self.enemies[row][col].is_alive:
-                        if player_bullet.colliderect(self.enemies[row][col]):
+                        if player_bullet.colliderect(self.enemies[row][col].rect):
                             self.enemy_killed = True
                             self.player_bullets.remove(player_bullet)
                             self.score += self.enemies[row][col].point_value
@@ -316,16 +330,17 @@ class Game:
             for row in self.enemies:
                 for enemy in row:
                     if enemy.is_alive:
-                        enemy.x += self.enemy_direction * self.enemy_speed
-                        if enemy.colliderect(self.player):
+                        enemy.rect.x += self.enemy_direction * self.enemy_speed
+                        if enemy.rect.colliderect(self.player.rect):
                             print("You have been hit!")
                             self.run("game_over")
             for row in range(len(self.enemies)):
                 for col in range(len(self.enemies[row])):
                     if self.enemies[row][col].is_alive:
                         if (
-                            self.enemies[row][col].bottomleft[0] <= 0
-                            or self.enemies[row][col].bottomright[0] >= self.screen_w
+                            self.enemies[row][col].rect.bottomleft[0] <= 0
+                            or self.enemies[row][col].rect.bottomright[0]
+                            >= self.screen_w
                         ):
                             reverse_needed = True
             if reverse_needed:
@@ -333,7 +348,7 @@ class Game:
                 for nested_row in self.enemies:
                     for enemy in nested_row:
                         if enemy.is_alive:
-                            enemy.y += 5
+                            enemy.rect.y += 5
             self.last_enemy_move_time = self.current_time
 
         if self.current_time - self.last_enemy_shot_time > self.enemy_shot_interval:
@@ -387,20 +402,18 @@ class Game:
         self.enemy_bullets = []
         self.enemies_that_can_shoot = []
         self.enemy_direction = 1
-        self.enemy_speed = 1
-        self.enemy_width = 40
-        self.enemy_height = 30
-        self.enemy_spacing = 10
-        self.enemy_side_margin = 50
-        self.enemy_spacing = 10
-        self.enemy_rows = 5
-        self.enemy_start_y = 50 + (self.level * 10)
-        print("new enemy start y", self.enemy_start_y)
+        self.enemy_speed = settings.ENEMY_SPEED
+        self.enemy_width = settings.ENEMY_WIDTH
+        self.enemy_height = settings.ENEMY_HEIGHT
+        self.enemy_spacing = settings.ENEMY_SPACING
+        self.enemy_side_margin = settings.ENEMY_SIDE_MARGIN
+        self.enemy_rows = settings.ENEMY_ROWS
+        self.enemy_start_y = settings.ENEMY_STARY_Y
         self.last_enemy_shot_time = 0
-        self.enemy_shot_interval = 250
-        self.enemy_move_interval = 350
-        self.enemy_max_speed_interval = 0
-        self.enemy_bullet_speed = 5
+        self.enemy_shot_interval = settings.ENEMY_SHOT_INTERVAL
+        self.enemy_move_interval = settings.ENEMY_MOVE_INTERVAL
+        self.enemy_max_speed_interval = settings.ENEMY_MAX_SPEED_INTERVAL
+        self.enemy_bullet_speed = settings.ENEMY_BULLET_SPEED
         self.enemy_killed = False
 
         self.last_enemy_move_time = 0
@@ -416,8 +429,8 @@ class Game:
 
         self.total_enemies = self.max_enemies * self.enemy_rows
 
-        self.triangle_color = (255, 255, 255)
-        self.player_lives_triangle_x = 20
+        self.triangle_color = settings.PLAYER_LIVES_TRI_COLOR
+        self.player_lives_triangle_x = settings.PLAYER_LIVES_TRI_X
 
         self.score = self.score
         self.current_time = 0
@@ -425,21 +438,26 @@ class Game:
         pygame.font.init()
         self.font = pygame.font.SysFont("Arial", 30)
 
-        self.barrier1 = Barrier(70, 350)
+        self.barrier1 = Barrier(settings.BARRIER_X, settings.BARRIER_Y)
         self.barrier2 = Barrier(
-            self.barrier1.orig_barrier_img.get_width() + self.barrier1.x + 40, 350
+            self.barrier1.orig_barrier_img.get_width() + self.barrier1.x + 40,
+            settings.BARRIER_Y,
         )
         self.barrier3 = Barrier(
-            self.barrier2.orig_barrier_img.get_width() + self.barrier2.x + 40, 350
+            self.barrier2.orig_barrier_img.get_width() + self.barrier2.x + 40,
+            settings.BARRIER_Y,
         )
         self.barrier4 = Barrier(
-            self.barrier3.orig_barrier_img.get_width() + self.barrier3.x + 40, 350
+            self.barrier3.orig_barrier_img.get_width() + self.barrier3.x + 40,
+            settings.BARRIER_Y,
         )
         self.barrier5 = Barrier(
-            self.barrier4.orig_barrier_img.get_width() + self.barrier4.x + 40, 350
+            self.barrier4.orig_barrier_img.get_width() + self.barrier4.x + 40,
+            settings.BARRIER_Y,
         )
         self.barrier6 = Barrier(
-            self.barrier5.orig_barrier_img.get_width() + self.barrier5.x + 40, 350
+            self.barrier5.orig_barrier_img.get_width() + self.barrier5.x + 40,
+            settings.BARRIER_Y,
         )
 
         self.all_barriers = []
@@ -469,12 +487,14 @@ class Game:
         for row in self.enemies:
             for enemy in row:
                 if enemy.is_alive:
-                    pygame.draw.rect(self.screen, (255, 0, 0), enemy)
+                    self.screen.blit(enemy.image, enemy.rect)
 
         for enemy_bullet in list(self.enemy_bullets):
+            # make into images
             pygame.draw.rect(self.screen, (0, 255, 0), enemy_bullet)
 
         for player_bullet in list(self.player.bullets):
+            # make into images
             pygame.draw.rect(self.screen, (255, 0, 0), player_bullet)
 
         for i in range(self.player.lives):
@@ -493,6 +513,7 @@ class Game:
     def create_enemy_grid(self):
         self.enemies.clear()
         point_val = 0
+        alien_level = 0
 
         for row in range(self.enemy_rows):
             row_enemies = []
@@ -505,18 +526,14 @@ class Game:
                 )
                 if row == 0:
                     point_val = 30
+                    alien_level = 3
                 elif row == 1 or row == 2:
                     point_val = 20
+                    alien_level = 2
                 else:
                     point_val = 10
-                enemy_rect = Enemy(
-                    enemy_x,
-                    enemy_y,
-                    self.enemy_width,
-                    self.enemy_height,
-                    point_val,
-                    is_alive=True,
-                )
+                    alien_level = 1
+                enemy_rect = Enemy(enemy_x, enemy_y, point_val, alien_level)
                 row_enemies.append(enemy_rect)
 
             self.enemies.append(row_enemies)

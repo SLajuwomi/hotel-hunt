@@ -22,11 +22,6 @@ class Player:
 
     def draw(self, screen, color):
         screen.blit(self.player_ship, self.player_ship_rect)
-        # top_of_tri = (self.rect.centerx, self.rect.top)
-        # bot_left_tri = (self.rect.left, self.rect.bottom)
-        # bot_right_tri = (self.rect.right, self.rect.bottom)
-        # tri_vertices = [top_of_tri, bot_left_tri, bot_right_tri]
-        # pygame.draw.polygon(screen, color, tri_vertices)
 
     def shoot(self):
         self.bullets.append(pygame.Rect(self.rect.centerx, self.rect.centery, 5, 5))

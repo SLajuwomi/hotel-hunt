@@ -70,3 +70,4 @@ current problems - sep 10
   - maybe add more barriers
   - there might be too many enemies
 - barriers, have rectangle split into pixels so that when a bullet hits it, the pixel hit is removed? or the top line is decreased in size
+- use constants instead of magic numbers
