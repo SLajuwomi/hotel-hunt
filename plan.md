@@ -52,12 +52,21 @@ current problems - sep 10
 - ~~only bottom row of enemies is shooting~~
 - ~~speed of enemies is not increasing as more die~~
 - need barriers - just decrease size of barrier
-- levels
-  - function called increase level
-    - if all enemies die increase level
-    - increase level changes attributes of Enemy objects and re passes them to the game
-      - more enemies?
-      - enemies closer to player?
-      - faster shooting?
-      - etc
+- ~~levels~~
+  - ~~function called increase level~~
+    - ~~if all enemies die increase level~~
+    - ~~increase level changes attributes of Enemy objects and re passes them to the game~~
+      - ~~more enemies?~~
+      - ~~enemies closer to player?~~
+      - ~~faster shooting?~~
+      - ~~etc~~
+
+## Future
+
+- Game is too easy
+  - players can spam shoot, this should not be able to happen
+  - players can move off screen, this should not be able to happen
+  - enemies shoot too fast
+  - maybe add more barriers
+  - there might be too many enemies
 - barriers, have rectangle split into pixels so that when a bullet hits it, the pixel hit is removed? or the top line is decreased in size
