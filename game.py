@@ -70,20 +70,30 @@ class Game:
         pygame.font.init()
         self.font = pygame.font.SysFont("Arial", 30)
 
-        self.barrier1 = Barrier(40, 350, 60, 40)
-        self.barrier2 = Barrier(self.barrier1.width + self.barrier1.x + 40, 350, 60, 40)
-        self.barrier3 = Barrier(self.barrier2.width + self.barrier2.x + 40, 350, 60, 40)
-        self.barrier4 = Barrier(self.barrier3.width + self.barrier3.x + 40, 350, 60, 40)
-        self.barrier5 = Barrier(self.barrier4.width + self.barrier4.x + 40, 350, 60, 40)
-        self.barrier6 = Barrier(self.barrier5.width + self.barrier5.x + 40, 350, 60, 40)
+        self.barrier1 = Barrier(70, 350)
+        self.barrier2 = Barrier(
+            self.barrier1.orig_barrier_img.get_width() + self.barrier1.x + 40, 350
+        )
+        self.barrier3 = Barrier(
+            self.barrier2.orig_barrier_img.get_width() + self.barrier2.x + 40, 350
+        )
+        self.barrier4 = Barrier(
+            self.barrier3.orig_barrier_img.get_width() + self.barrier3.x + 40, 350
+        )
+        self.barrier5 = Barrier(
+            self.barrier4.orig_barrier_img.get_width() + self.barrier4.x + 40, 350
+        )
+        self.barrier6 = Barrier(
+            self.barrier5.orig_barrier_img.get_width() + self.barrier5.x + 40, 350
+        )
 
         self.all_barriers = []
-        self.all_barriers.append(self.barrier1.barrier_list)
-        self.all_barriers.append(self.barrier2.barrier_list)
-        self.all_barriers.append(self.barrier3.barrier_list)
-        self.all_barriers.append(self.barrier4.barrier_list)
-        self.all_barriers.append(self.barrier5.barrier_list)
-        self.all_barriers.append(self.barrier6.barrier_list)
+        self.all_barriers.append(self.barrier1)
+        self.all_barriers.append(self.barrier2)
+        self.all_barriers.append(self.barrier3)
+        self.all_barriers.append(self.barrier4)
+        self.all_barriers.append(self.barrier5)
+        self.all_barriers.append(self.barrier6)
 
         self.player_ship = pygame.image.load(
             "game-art/space-invaders-ship.png"
@@ -197,20 +207,30 @@ class Game:
         pygame.font.init()
         self.font = pygame.font.SysFont("Arial", 30)
 
-        self.barrier1 = Barrier(40, 350, 60, 40)
-        self.barrier2 = Barrier(self.barrier1.width + self.barrier1.x + 40, 350, 60, 40)
-        self.barrier3 = Barrier(self.barrier2.width + self.barrier2.x + 40, 350, 60, 40)
-        self.barrier4 = Barrier(self.barrier3.width + self.barrier3.x + 40, 350, 60, 40)
-        self.barrier5 = Barrier(self.barrier4.width + self.barrier4.x + 40, 350, 60, 40)
-        self.barrier6 = Barrier(self.barrier5.width + self.barrier5.x + 40, 350, 60, 40)
+        self.barrier1 = Barrier(70, 350)
+        self.barrier2 = Barrier(
+            self.barrier1.orig_barrier_img.get_width() + self.barrier1.x + 40, 350
+        )
+        self.barrier3 = Barrier(
+            self.barrier2.orig_barrier_img.get_width() + self.barrier2.x + 40, 350
+        )
+        self.barrier4 = Barrier(
+            self.barrier3.orig_barrier_img.get_width() + self.barrier3.x + 40, 350
+        )
+        self.barrier5 = Barrier(
+            self.barrier4.orig_barrier_img.get_width() + self.barrier4.x + 40, 350
+        )
+        self.barrier6 = Barrier(
+            self.barrier5.orig_barrier_img.get_width() + self.barrier5.x + 40, 350
+        )
 
         self.all_barriers = []
-        self.all_barriers.append(self.barrier1.barrier_list)
-        self.all_barriers.append(self.barrier2.barrier_list)
-        self.all_barriers.append(self.barrier3.barrier_list)
-        self.all_barriers.append(self.barrier4.barrier_list)
-        self.all_barriers.append(self.barrier5.barrier_list)
-        self.all_barriers.append(self.barrier6.barrier_list)
+        self.all_barriers.append(self.barrier1)
+        self.all_barriers.append(self.barrier2)
+        self.all_barriers.append(self.barrier3)
+        self.all_barriers.append(self.barrier4)
+        self.all_barriers.append(self.barrier5)
+        self.all_barriers.append(self.barrier6)
 
         self.create_enemy_grid()
         self.run("playing")
@@ -255,11 +275,13 @@ class Game:
             player_bullet.top -= self.player_bullet_speed
             if player_bullet.top > self.screen_h or player_bullet.top < 0:
                 self.player_bullets.remove(player_bullet)
-            for barrier_list in self.all_barriers:
-                for barrier in barrier_list:
-                    if player_bullet.colliderect(barrier):
+            for barrier in self.all_barriers:
+                if barrier.barrier_list:
+                    if player_bullet.colliderect(barrier.barrier_list[0]):
                         self.player_bullets.remove(player_bullet)
-                        barrier_list.remove(barrier)
+                        barrier.barrier_list.pop(0)
+                        barrier.barrier_imgs_list.pop(0)
+                        break
             for row in range(len(self.enemies)):
                 for col in range(len(self.enemies[row])):
                     if self.enemies[row][col].is_alive:
@@ -328,16 +350,18 @@ class Game:
                 if self.player.lives == 0:
                     print("GAME OVER!")
                     self.run("game_over")
-            for barrier_list in self.all_barriers:
-                for barrier in barrier_list:
-                    if enemy_bullet.colliderect(barrier):
+            for barrier in self.all_barriers:
+                if barrier.barrier_list:
+                    if enemy_bullet.colliderect(barrier.barrier_list[0]):
                         self.enemy_bullets.remove(enemy_bullet)
-                        barrier_list.remove(barrier)
+                        barrier.barrier_list.pop(0)
+                        barrier.barrier_imgs_list.pop(0)
                         break
+
             if enemy_bullet.y > self.screen.get_height() or enemy_bullet.y < 0:
                 self.enemy_bullets.remove(enemy_bullet)
         if self.enemy_alive_count == 0:
-            self.level += 10
+            self.level += 1
             print("top self level", self.level)
             self.start_new_level()
 
@@ -371,7 +395,7 @@ class Game:
         self.enemy_spacing = 10
         self.enemy_rows = 5
         self.enemy_start_y = 50 + (self.level * 10)
-        print(self.enemy_start_y)
+        print("new enemy start y", self.enemy_start_y)
         self.last_enemy_shot_time = 0
         self.enemy_shot_interval = 250
         self.enemy_move_interval = 350
@@ -396,26 +420,35 @@ class Game:
         self.player_lives_triangle_x = 20
 
         self.score = self.score
-        print("current score", self.score)
         self.current_time = 0
 
         pygame.font.init()
         self.font = pygame.font.SysFont("Arial", 30)
 
-        self.barrier1 = Barrier(40, 350, 60, 40)
-        self.barrier2 = Barrier(self.barrier1.width + self.barrier1.x + 40, 350, 60, 40)
-        self.barrier3 = Barrier(self.barrier2.width + self.barrier2.x + 40, 350, 60, 40)
-        self.barrier4 = Barrier(self.barrier3.width + self.barrier3.x + 40, 350, 60, 40)
-        self.barrier5 = Barrier(self.barrier4.width + self.barrier4.x + 40, 350, 60, 40)
-        self.barrier6 = Barrier(self.barrier5.width + self.barrier5.x + 40, 350, 60, 40)
+        self.barrier1 = Barrier(70, 350)
+        self.barrier2 = Barrier(
+            self.barrier1.orig_barrier_img.get_width() + self.barrier1.x + 40, 350
+        )
+        self.barrier3 = Barrier(
+            self.barrier2.orig_barrier_img.get_width() + self.barrier2.x + 40, 350
+        )
+        self.barrier4 = Barrier(
+            self.barrier3.orig_barrier_img.get_width() + self.barrier3.x + 40, 350
+        )
+        self.barrier5 = Barrier(
+            self.barrier4.orig_barrier_img.get_width() + self.barrier4.x + 40, 350
+        )
+        self.barrier6 = Barrier(
+            self.barrier5.orig_barrier_img.get_width() + self.barrier5.x + 40, 350
+        )
 
         self.all_barriers = []
-        self.all_barriers.append(self.barrier1.barrier_list)
-        self.all_barriers.append(self.barrier2.barrier_list)
-        self.all_barriers.append(self.barrier3.barrier_list)
-        self.all_barriers.append(self.barrier4.barrier_list)
-        self.all_barriers.append(self.barrier5.barrier_list)
-        self.all_barriers.append(self.barrier6.barrier_list)
+        self.all_barriers.append(self.barrier1)
+        self.all_barriers.append(self.barrier2)
+        self.all_barriers.append(self.barrier3)
+        self.all_barriers.append(self.barrier4)
+        self.all_barriers.append(self.barrier5)
+        self.all_barriers.append(self.barrier6)
 
         self.create_enemy_grid()
         self.run("playing")
@@ -425,9 +458,11 @@ class Game:
         # self.screen.blit(self.player_ship, self.player_ship_rect)
         self.player.draw(self.screen, self.triangle_color)
 
-        for x in self.all_barriers:
-            for y in x:
-                pygame.draw.rect(self.screen, (0, 255, 150), y)
+        for barrier in self.all_barriers:
+            if barrier.barrier_list:
+                current_rect = barrier.barrier_list[0]
+                current_img = barrier.barrier_imgs_list[0]
+                self.screen.blit(current_img, current_rect)
 
         score_surface = self.font.render(f"{self.score}", True, (255, 255, 255))
         self.screen.blit(score_surface, (10, 10))
