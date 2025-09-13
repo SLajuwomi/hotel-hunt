@@ -71,3 +71,4 @@ current problems - sep 10
   - there might be too many enemies
 - barriers, have rectangle split into pixels so that when a bullet hits it, the pixel hit is removed? or the top line is decreased in size
 - use constants instead of magic numbers
+- random bug is happening with player bullets, sometimes crashes randomly when trying to remove a player bullet that has already been removed
