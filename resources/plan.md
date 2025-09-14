@@ -73,3 +73,4 @@ current problems - sep 10
 - use constants instead of magic numbers
 - random bug is happening with player bullets, sometimes crashes randomly when trying to remove a player bullet that has already been removed
 - shots should destroy each other if they come in contact like the original game
+- add music
