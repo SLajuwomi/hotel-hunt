@@ -7,7 +7,6 @@ This is a clone of the 1978 arcade game Space Invaders made with Python and Pyga
 - Python 3
   - [How to Install Python 3](https://realpython.com/installing-python/)
 - pygame-ce
-  - [How to Install pygame-ce]
 
 ## How to Run
 
