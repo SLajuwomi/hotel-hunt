@@ -1,9 +1,6 @@
 import pygame
 
 
-# barrier spacing - 40
-# barrier width - 60
-# barrier height - 40
 class Barrier:
     def __init__(self, x, y):
         self.orig_barrier_img = pygame.image.load(

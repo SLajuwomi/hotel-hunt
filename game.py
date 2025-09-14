@@ -16,7 +16,6 @@ class Game:
         self.is_running = True
         self.clock = pygame.time.Clock()
         self.state = state
-        self.level = 10
 
         self.player_bullets = []
 
@@ -91,60 +90,6 @@ class Game:
             self.barrier5.orig_barrier_img.get_width() + self.barrier5.x + 40,
             settings.BARRIER_Y,
         )
-        # self.barrier7 = Barrier(
-        #     self.barrier6.orig_barrier_img.get_width() + self.barrier6.x + 40,
-        #     settings.BARRIER_Y,
-        # )
-        # self.barrier8 = Barrier(
-        #     self.barrier7.orig_barrier_img.get_width() + self.barrier7.x + 40,
-        #     settings.BARRIER_Y,
-        # )
-        # self.barrier9 = Barrier(
-        #     self.barrier8.orig_barrier_img.get_width() + self.barrier8.x + 40,
-        #     settings.BARRIER_Y,
-        # )
-        # self.barrier10 = Barrier(
-        #     self.barrier9.orig_barrier_img.get_width() + self.barrier9.x + 40,
-        #     settings.BARRIER_Y,
-        # )
-
-        # self.barrier11 = Barrier(settings.BARRIER_X, settings.LINE_TWO_BARRIER_Y)
-        # self.barrier12 = Barrier(
-        #     self.barrier11.orig_barrier_img.get_width() + self.barrier11.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier13 = Barrier(
-        #     self.barrier12.orig_barrier_img.get_width() + self.barrier12.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier14 = Barrier(
-        #     self.barrier13.orig_barrier_img.get_width() + self.barrier13.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier15 = Barrier(
-        #     self.barrier14.orig_barrier_img.get_width() + self.barrier14.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier16 = Barrier(
-        #     self.barrier15.orig_barrier_img.get_width() + self.barrier15.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier17 = Barrier(
-        #     self.barrier16.orig_barrier_img.get_width() + self.barrier16.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier18 = Barrier(
-        #     self.barrier17.orig_barrier_img.get_width() + self.barrier17.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier19 = Barrier(
-        #     self.barrier18.orig_barrier_img.get_width() + self.barrier18.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier20 = Barrier(
-        #     self.barrier19.orig_barrier_img.get_width() + self.barrier19.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
 
         self.all_barriers = []
         self.all_barriers.append(self.barrier1)
@@ -153,20 +98,6 @@ class Game:
         self.all_barriers.append(self.barrier4)
         self.all_barriers.append(self.barrier5)
         self.all_barriers.append(self.barrier6)
-        # self.all_barriers.append(self.barrier7)
-        # self.all_barriers.append(self.barrier8)
-        # self.all_barriers.append(self.barrier9)
-        # self.all_barriers.append(self.barrier10)
-        # self.all_barriers.append(self.barrier11)
-        # self.all_barriers.append(self.barrier12)
-        # self.all_barriers.append(self.barrier13)
-        # self.all_barriers.append(self.barrier14)
-        # self.all_barriers.append(self.barrier15)
-        # self.all_barriers.append(self.barrier16)
-        # self.all_barriers.append(self.barrier17)
-        # self.all_barriers.append(self.barrier18)
-        # self.all_barriers.append(self.barrier19)
-        # self.all_barriers.append(self.barrier20)
 
         self.player_ship = pygame.image.load(
             "game-art/space-invaders-ship.png"
@@ -300,60 +231,6 @@ class Game:
             self.barrier5.orig_barrier_img.get_width() + self.barrier5.x + 40,
             settings.BARRIER_Y,
         )
-        # self.barrier7 = Barrier(
-        #     self.barrier6.orig_barrier_img.get_width() + self.barrier6.x + 40,
-        #     settings.BARRIER_Y,
-        # )
-        # self.barrier8 = Barrier(
-        #     self.barrier7.orig_barrier_img.get_width() + self.barrier7.x + 40,
-        #     settings.BARRIER_Y,
-        # )
-        # self.barrier9 = Barrier(
-        #     self.barrier8.orig_barrier_img.get_width() + self.barrier8.x + 40,
-        #     settings.BARRIER_Y,
-        # )
-        # self.barrier10 = Barrier(
-        #     self.barrier9.orig_barrier_img.get_width() + self.barrier9.x + 40,
-        #     settings.BARRIER_Y,
-        # )
-
-        # self.barrier11 = Barrier(settings.BARRIER_X, settings.LINE_TWO_BARRIER_Y)
-        # self.barrier12 = Barrier(
-        #     self.barrier11.orig_barrier_img.get_width() + self.barrier11.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier13 = Barrier(
-        #     self.barrier12.orig_barrier_img.get_width() + self.barrier12.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier14 = Barrier(
-        #     self.barrier13.orig_barrier_img.get_width() + self.barrier13.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier15 = Barrier(
-        #     self.barrier14.orig_barrier_img.get_width() + self.barrier14.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier16 = Barrier(
-        #     self.barrier15.orig_barrier_img.get_width() + self.barrier15.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier17 = Barrier(
-        #     self.barrier16.orig_barrier_img.get_width() + self.barrier16.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier18 = Barrier(
-        #     self.barrier17.orig_barrier_img.get_width() + self.barrier17.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier19 = Barrier(
-        #     self.barrier18.orig_barrier_img.get_width() + self.barrier18.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier20 = Barrier(
-        #     self.barrier19.orig_barrier_img.get_width() + self.barrier19.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
 
         self.all_barriers = []
         self.all_barriers.append(self.barrier1)
@@ -362,20 +239,6 @@ class Game:
         self.all_barriers.append(self.barrier4)
         self.all_barriers.append(self.barrier5)
         self.all_barriers.append(self.barrier6)
-        # self.all_barriers.append(self.barrier7)
-        # self.all_barriers.append(self.barrier8)
-        # self.all_barriers.append(self.barrier9)
-        # self.all_barriers.append(self.barrier10)
-        # self.all_barriers.append(self.barrier11)
-        # self.all_barriers.append(self.barrier12)
-        # self.all_barriers.append(self.barrier13)
-        # self.all_barriers.append(self.barrier14)
-        # self.all_barriers.append(self.barrier15)
-        # self.all_barriers.append(self.barrier16)
-        # self.all_barriers.append(self.barrier17)
-        # self.all_barriers.append(self.barrier18)
-        # self.all_barriers.append(self.barrier19)
-        # self.all_barriers.append(self.barrier20)
 
         self.create_enemy_grid()
         self.run("playing")
@@ -472,7 +335,7 @@ class Game:
         speed_range = self.enemy_move_interval - self.enemy_max_speed_interval
         interval_reduction = 0
         if self.enemy_killed:
-            interval_reduction = speed_range * self.percent_enemies_killed  # problem
+            interval_reduction = speed_range * self.percent_enemies_killed
         self.enemy_move_interval = self.enemy_move_interval - interval_reduction
 
         reverse_needed = False
@@ -500,6 +363,8 @@ class Game:
                         if enemy.is_alive:
                             enemy.rect.y += 5
             self.last_enemy_move_time = self.current_time
+
+        print("current time", self.current_time)
 
         if self.current_time - self.last_enemy_shot_time > self.enemy_shot_interval:
             if self.enemies_that_can_shoot:
@@ -530,7 +395,6 @@ class Game:
                 self.enemy_bullets.remove(enemy_bullet)
         if self.enemy_alive_count == 0:
             self.level += 1
-            print("top self level", self.level)
             self.start_new_level()
 
         pygame.display.flip()
@@ -561,7 +425,7 @@ class Game:
         self.enemy_spacing = settings.ENEMY_SPACING
         self.enemy_side_margin = settings.ENEMY_SIDE_MARGIN
         self.enemy_rows = settings.ENEMY_ROWS
-        self.enemy_start_y = settings.ENEMY_STARY_Y
+        self.enemy_start_y = settings.ENEMY_STARY_Y + ((self.level - 1) * 10)
         self.last_enemy_shot_time = 0
         self.enemy_shot_interval = settings.ENEMY_SHOT_INTERVAL
         self.enemy_move_interval = settings.ENEMY_MOVE_INTERVAL
@@ -612,60 +476,6 @@ class Game:
             self.barrier5.orig_barrier_img.get_width() + self.barrier5.x + 40,
             settings.BARRIER_Y,
         )
-        # self.barrier7 = Barrier(
-        #     self.barrier6.orig_barrier_img.get_width() + self.barrier6.x + 40,
-        #     settings.BARRIER_Y,
-        # )
-        # self.barrier8 = Barrier(
-        #     self.barrier7.orig_barrier_img.get_width() + self.barrier7.x + 40,
-        #     settings.BARRIER_Y,
-        # )
-        # self.barrier9 = Barrier(
-        #     self.barrier8.orig_barrier_img.get_width() + self.barrier8.x + 40,
-        #     settings.BARRIER_Y,
-        # )
-        # self.barrier10 = Barrier(
-        #     self.barrier9.orig_barrier_img.get_width() + self.barrier9.x + 40,
-        #     settings.BARRIER_Y,
-        # )
-
-        # self.barrier11 = Barrier(settings.BARRIER_X, settings.LINE_TWO_BARRIER_Y)
-        # self.barrier12 = Barrier(
-        #     self.barrier11.orig_barrier_img.get_width() + self.barrier11.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier13 = Barrier(
-        #     self.barrier12.orig_barrier_img.get_width() + self.barrier12.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier14 = Barrier(
-        #     self.barrier13.orig_barrier_img.get_width() + self.barrier13.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier15 = Barrier(
-        #     self.barrier14.orig_barrier_img.get_width() + self.barrier14.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier16 = Barrier(
-        #     self.barrier15.orig_barrier_img.get_width() + self.barrier15.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier17 = Barrier(
-        #     self.barrier16.orig_barrier_img.get_width() + self.barrier16.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier18 = Barrier(
-        #     self.barrier17.orig_barrier_img.get_width() + self.barrier17.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier19 = Barrier(
-        #     self.barrier18.orig_barrier_img.get_width() + self.barrier18.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
-        # self.barrier20 = Barrier(
-        #     self.barrier19.orig_barrier_img.get_width() + self.barrier19.x + 20,
-        #     settings.LINE_TWO_BARRIER_Y,
-        # )
 
         self.all_barriers = []
         self.all_barriers.append(self.barrier1)
@@ -674,27 +484,12 @@ class Game:
         self.all_barriers.append(self.barrier4)
         self.all_barriers.append(self.barrier5)
         self.all_barriers.append(self.barrier6)
-        # self.all_barriers.append(self.barrier7)
-        # self.all_barriers.append(self.barrier8)
-        # self.all_barriers.append(self.barrier9)
-        # self.all_barriers.append(self.barrier10)
-        # self.all_barriers.append(self.barrier11)
-        # self.all_barriers.append(self.barrier12)
-        # self.all_barriers.append(self.barrier13)
-        # self.all_barriers.append(self.barrier14)
-        # self.all_barriers.append(self.barrier15)
-        # self.all_barriers.append(self.barrier16)
-        # self.all_barriers.append(self.barrier17)
-        # self.all_barriers.append(self.barrier18)
-        # self.all_barriers.append(self.barrier19)
-        # self.all_barriers.append(self.barrier20)
 
         self.create_enemy_grid()
         self.run("playing")
 
     def draw(self):
         self.screen.fill((0, 0, 0))
-        # self.screen.blit(self.player_ship, self.player_ship_rect)
         self.player.draw(self.screen, self.triangle_color)
 
         for barrier in self.all_barriers:

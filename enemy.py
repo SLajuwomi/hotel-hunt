@@ -34,7 +34,6 @@ class Enemy(pygame.sprite.Sprite):
         self.image = self.images[self.current_frame]
 
         self.rect = self.image.get_rect(topleft=(x, y))
-        self.mask = pygame.mask.from_surface(self.image)
 
         self.point_value = point_value
         self.is_alive = True
