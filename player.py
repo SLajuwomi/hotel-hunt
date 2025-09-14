@@ -5,7 +5,7 @@ from bullet import Bullet
 class Player:
     def __init__(self, x, y, speed, lives, bullets):
         self.player_ship = pygame.image.load(
-            "game-art/space-invaders-ship-selected.png"
+            "game-art/space-invaders-ship.png"
         ).convert_alpha()
         self.player_ship_rect = self.player_ship.get_rect()
         self.player_ship_rect.center = (x, y)
