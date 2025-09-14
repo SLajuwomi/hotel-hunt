@@ -1,4 +1,5 @@
 import pygame
+from bullet import Bullet
 
 
 class Player:
@@ -24,4 +25,5 @@ class Player:
         screen.blit(self.player_ship, self.player_ship_rect)
 
     def shoot(self):
-        self.bullets.append(pygame.Rect(self.rect.centerx, self.rect.centery, 5, 5))
+        new_bullet = Bullet(self.rect.centerx, self.rect.top)
+        self.bullets.append(new_bullet)

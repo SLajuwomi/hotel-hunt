@@ -1,4 +1,5 @@
 import pygame
+from enemy_bullet import EnemyBullet
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -50,4 +51,4 @@ class Enemy(pygame.sprite.Sprite):
             self.mask = pygame.mask.from_surface(self.image)
 
     def shoot(self):
-        return pygame.Rect(self.rect.midbottom[0], self.rect.midbottom[1], 5, 5)
+        return EnemyBullet(self.rect.midbottom[0], self.rect.midbottom[1])

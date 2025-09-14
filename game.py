@@ -232,11 +232,11 @@ class Game:
         self.player = Player(
             self.screen_w // 2,
             self.screen_h - 60,
-            2,
-            3,
+            settings.PLAYER_SPEED,
+            settings.PLAYER_LIVES,
             self.player_bullets,
         )
-        self.player_bullet_speed = 5
+        self.player_bullet_speed = settings.PLAYER_BULLET_SPEED
 
         self.enemies = []
         self.enemy_bullets = []
@@ -422,17 +422,15 @@ class Game:
                     enemy.update()
 
         for player_bullet in list(self.player_bullets):
-            player_bullet.top -= self.player_bullet_speed
+            player_bullet.update(self.player_bullet_speed)
             bullet_removed = False
-            if not bullet_removed and (
-                player_bullet.top > self.screen_h or player_bullet.top < 0
-            ):
+            if not bullet_removed and (player_bullet.rect.bottom < 0):
                 self.player_bullets.remove(player_bullet)
                 bullet_removed = True
             if not bullet_removed:
                 for barrier in self.all_barriers:
                     if barrier.barrier_list:
-                        if player_bullet.colliderect(barrier.barrier_list[0]):
+                        if player_bullet.rect.colliderect(barrier.barrier_list[0]):
                             self.player_bullets.remove(player_bullet)
                             barrier.barrier_list.pop(0)
                             barrier.barrier_imgs_list.pop(0)
@@ -443,7 +441,9 @@ class Game:
                 for row in range(len(self.enemies)):
                     for col in range(len(self.enemies[row])):
                         if self.enemies[row][col].is_alive:
-                            if player_bullet.colliderect(self.enemies[row][col].rect):
+                            if player_bullet.rect.colliderect(
+                                self.enemies[row][col].rect
+                            ):
                                 self.enemy_killed = True
                                 self.player_bullets.remove(player_bullet)
                                 self.score += self.enemies[row][col].point_value
@@ -508,8 +508,8 @@ class Game:
                 self.last_enemy_shot_time = self.current_time
 
         for enemy_bullet in self.enemy_bullets:
-            enemy_bullet.y += self.enemy_bullet_speed
-            if enemy_bullet.colliderect(self.player.rect):
+            enemy_bullet.update(self.enemy_bullet_speed)
+            if enemy_bullet.rect.colliderect(self.player.rect):
                 self.player.lives -= 1
                 self.enemy_bullets.remove(enemy_bullet)
                 if self.player.lives == 0:
@@ -517,13 +517,16 @@ class Game:
                     self.run("game_over")
             for barrier in self.all_barriers:
                 if barrier.barrier_list:
-                    if enemy_bullet.colliderect(barrier.barrier_list[0]):
+                    if enemy_bullet.rect.colliderect(barrier.barrier_list[0]):
                         self.enemy_bullets.remove(enemy_bullet)
                         barrier.barrier_list.pop(0)
                         barrier.barrier_imgs_list.pop(0)
                         break
 
-            if enemy_bullet.y > self.screen.get_height() or enemy_bullet.y < 0:
+            if (
+                enemy_bullet.rect.y > self.screen.get_height()
+                or enemy_bullet.rect.y < 0
+            ):
                 self.enemy_bullets.remove(enemy_bullet)
         if self.enemy_alive_count == 0:
             self.level += 1
@@ -542,11 +545,11 @@ class Game:
         self.player = Player(
             self.screen_w // 2,
             self.screen_h - 60,
-            2,
-            3,
+            settings.PLAYER_SPEED,
+            settings.PLAYER_LIVES,
             self.player_bullets,
         )
-        self.player_bullet_speed = 5
+        self.player_bullet_speed = settings.PLAYER_BULLET_SPEED
 
         self.enemies = []
         self.enemy_bullets = []
@@ -709,11 +712,10 @@ class Game:
 
         for enemy_bullet in list(self.enemy_bullets):
             # make into images
-            pygame.draw.rect(self.screen, (0, 255, 0), enemy_bullet)
+            self.screen.blit(enemy_bullet.image, enemy_bullet.rect)
 
         for player_bullet in list(self.player.bullets):
-            # make into images
-            pygame.draw.rect(self.screen, (255, 0, 0), player_bullet)
+            self.screen.blit(player_bullet.image, player_bullet.rect)
 
         for i in range(self.player.lives):
             if self.player.lives > 0:
