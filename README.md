@@ -2,6 +2,9 @@
 
 This is a clone of the 1978 arcade game Space Invaders made with Python and Pygame. I did this for my first personal project as part of [Boot.dev](https://www.boot.dev/dashboard), a backend development bootcamp.
 
+https://github.com/user-attachments/assets/38826636-ef47-44df-be97-4033cd8108d9
+
+
 ## Requirements
 
 - Python 3
